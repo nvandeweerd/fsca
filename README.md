@@ -2,12 +2,17 @@ README
 ================
 
 This document provides definitions for the syntactic units and explains
+<<<<<<< HEAD
 in more detail how they were extracted using the `synt.units.fcn()`
+=======
+in more detail how they were extracted using the *synt.units.fcn()*
+>>>>>>> 04c462515aaf086de37b6bca61573070f4cad087
 function written in R (R Core Team, 2019).
 
 # Introduction
 
 The input of the function is a dependency parsed sentence in CONLL
+<<<<<<< HEAD
 format. An example (slightly modified for readability) for Sentence 1 is
 provided below.
 
@@ -31,6 +36,25 @@ lcf100[[91]] %>%
 ```
 
 <br>
+=======
+format. An example (slightly modified for readability) for Sentence (1)
+is provided in Table 1.
+
+1)  C’est un point très important.  
+    *It is a very important point.* <br>
+    
+    | TOKE | N LEMM    | A POS     |  POSI | TION DEP\_ | TYPE DEP\_  | ON |
+    | ---: | --------- | --------- | ----: | ---------- | ----------- | :- |
+    | 1723 | C’        | ce        |   CLS | 1          | suj         | 2  |
+    | 1724 | est       | être      |     V | 2          | root        | 0  |
+    | 1725 | un        | un        |   DET | 3          | det         | 4  |
+    | 1726 | point     | point     |    NC | 4          | ats         | 2  |
+    | 1727 | très      | très      |   ADV | 5          | advmod\_ADJ | 6  |
+    | 1728 | important | important |   ADJ | 6          | amod        | 4  |
+    | 1729 | .         | .         | PONCT | 7          | ponct       | 2  |
+    | <br> |           |           |       |            |             |    |
+    
+>>>>>>> 04c462515aaf086de37b6bca61573070f4cad087
 
 In this case, the main verb of the sentence is *est* (‘is-3SG.PRES’) and
 is labeled as the ‘root’. As the top level node of a sentence, it is not
@@ -67,16 +91,29 @@ is already segmented into sentences, no additional query is required.
 ## Clauses
 
 Clauses are defined as structures with a subject and a finite verb
+<<<<<<< HEAD
 (Hunt, 1965). After identifying dependent clauses and T-units, clauses
 include all T-units as well as all subordinate clauses emedded within
 the T-units in a given sentence.
+=======
+(Hunt, 1965). After identifying dependent clauses (Section
+@ref(dep-clauses)) and T-units (Section @ref(tunits)), clauses include
+all T-units as well as all subordinate clauses emedded within the
+T-units in a given sentence.
+>>>>>>> 04c462515aaf086de37b6bca61573070f4cad087
 
 ## Dependent clauses
 
 Dependent clauses are clauses which are semantically and/or structurally
 dependent on a super-ordinate syntactic structure. They include nominal
+<<<<<<< HEAD
 clauses, adverbial clauses and adjectival clauses (Hunt, 1965; Lu,
 2010). They must contain a finite verb and a subject.
+=======
+clauses (@ref(nomclause)), adverbial clauses (@ref(advclause)) and
+adjectival clauses (@ref(adjclause)) (Hunt, 1965; Lu, 2010). They must
+contain a finite verb and a subject.
+>>>>>>> 04c462515aaf086de37b6bca61573070f4cad087
 
 ### Nominal clauses
 
