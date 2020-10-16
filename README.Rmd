@@ -24,7 +24,7 @@ lcf100 <-  xmlconll.fcn("data/lcf_100.xml")
 lcf400 <-  xmlconll.fcn("data/lcf_400.xml")
 ```
 
-This document provides definitions for the syntactic units and explains in more detail how they were extracted using the `synt.units.fcn()` function written in R [@RCoreTeam2019].
+This document provides definitions for the syntactic units and explains in more detail how they were extracted using the `synt.units.fcn()` function written in R [@RCoreTeam2019]. test
 
 
 # Introduction  
