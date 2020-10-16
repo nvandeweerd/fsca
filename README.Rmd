@@ -1,0 +1,171 @@
+---
+title: "README"
+output: github_document
+bibliography: "citations.bib"
+csl: "apa-6th-edition.csl"
+editor_options: 
+  chunk_output_type: console
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE, collapse = TRUE)
+library(here)
+library(knitr); library(tidyverse); 
+library(officedown); library(flextable); 
+library(officer); library(igraph)
+
+sent.index <- 0
+tab.index <- 0
+fig.index <- 0
+```
+
+```{r load-sent, include=FALSE}
+source(here("R", "synt.units.fcn.R"))
+lcf100 <-  xmlconll.fcn("data/lcf_100.xml")
+lcf400 <-  xmlconll.fcn("data/lcf_400.xml")
+```
+
+This document provides definitions for the syntactic units and explains in more detail how they were extracted using the *synt.units.fcn()* function written in R [@RCoreTeam2019].
+
+
+# Introduction  
+
+The input of the function is a dependency parsed sentence in CONLL format. An example (slightly modified for readability) for Sentence (`r (sent.index <- 1)`) is provided in Table `r (tab.index <- tab.index + 1)`.
+
+(@`r sent.index`) C'est un point très important.  
+*It is a very important point.*
+<br>
+
+```{r CONLL, echo=FALSE}
+lcf100[[91]] %>%
+  select(TOKEN, LEMMA, POS = POS.MELT, POSITION, DEP_TYPE, DEP_ON) %>%
+  knitr::kable() 
+
+```
+<br>
+
+In this case, the main verb of the sentence is *est* ('is-3SG.PRES') and is labeled as the 'root'. As the top level node of a sentence, it is not dependent on any other word, hence the value of 0 in the DEP_ON column. Because *est* is the second word of the sentence, the position is 2 (indicated in the POSITION column). All words which are directly dependent on *est* have the value of 2 in the DEP_ON column. This includes the subject *C'* ('it') as well as the subject attribute *point* ('point'). The sentence-final period is also dependent on the root. The words which are directly dependent on *point* include the determiner *un* ('a') and the adjective *important* ('important'), which is itself modified by the adverb *très* ('very'). In this way, every word in the sentence is dependent on one and only one word.^[For an overview of dependency parsing see Green [-@Green2011].] 
+
+# Syntactic structures  
+
+The *synt.units.fcn()* function first searches for a list of node words for a given unit (e.g. nouns for noun phrases) and then extracts all of the dependencies on each of the node words using the using the *induced.subgraph()* function from the *igraph* package [@Csardi2006]. The definitions used for each unit are provided below along with examples extracted from the corpus. Each example provides the original sentence followed by the units which were extracted. They have been simplified for readability by pasting the tokens together.
+
+## Sentences
+Following Lu [-@Lu2010: 481] we defined a sentence as “a group of words delimited by one of the following punctuation marks that signal the end of a sentence: period, question mark, exclamation mark, quotation mark or ellipsis”. Because the CONLL input to the *synt.units.fcn()* function is already segmented into sentences, no additional query is required.
+
+## Clauses
+Clauses are defined as structures with a subject and a finite verb [@Hunt1965]. After identifying dependent clauses (Section \@ref(dep-clauses)) and T-units (Section \@ref(tunits)), clauses include all T-units as well as all subordinate clauses emedded within the T-units in a given sentence.
+
+## Dependent clauses {#dep-clauses}
+Dependent clauses are clauses which are semantically and/or structurally dependent on a super-ordinate syntactic structure. They include nominal clauses (\@ref(nomclause)), adverbial clauses (\@ref(advclause)) and adjectival clauses (\@ref(adjclause)) [@Hunt1965; @Lu2010]. They must contain a finite verb and a subject.  
+
+### Nominal clauses {#nomclause}
+Nominal clauses are extracted using subordinate conjunctions (e.g. *que*, 'which') as the main node. 
+
+```{r}
+lcf400[[130]][["TOKEN"]] %>% 
+  paste(collapse = " ")
+synt.units.fcn(lcf400[[130]])[["DEP_CLAUSES"]][["TOKENS"]] %>%
+  sapply(., paste, collapse = " ")
+```
+
+### Adverbial clauses {#advclause}
+Adverbial clauses are also extracted using subordinate conjunctions as the main node.  
+
+```{r}
+lcf400[[291]][["TOKEN"]] %>% 
+  paste(collapse = " ")
+synt.units.fcn(lcf400[[291]])[["DEP_CLAUSES"]][["TOKENS"]] %>%
+  sapply(., paste, collapse = " ")
+```
+
+### Adjectival clauses {#adjclause}
+Adjectival clauses are extracted using pronouns and finite verbs that modify a noun as the main nodes (e.g. *durent* and *arrivent* in the example below).  
+
+```{r}
+lcf400[[16]][["TOKEN"]] %>% 
+  paste(collapse = " ")
+synt.units.fcn(lcf400[[16]])[["DEP_CLAUSES"]][["TOKENS"]] %>%
+  sapply(., paste, collapse = " ")
+```
+
+### Special cases
+
+Clauses of the type 'il y a' are considered dependent clauses only if *a* is directly dependent on a finite verb or if there is a finite verb dependent on *a*. This means that adverbial clauses which function like 'ago' in English (e.g. *il y a deux ans...*; 'two years ago...') are captured as dependent clauses but simple declaratives (e.g. *il y a une maison*; 'there is a house') are not.  
+
+
+```{r}
+lcf100[[68]][["TOKEN"]] %>% 
+  paste(collapse = " ")
+synt.units.fcn(lcf100[[68]])[["DEP_CLAUSES"]][["TOKENS"]] %>%
+  sapply(., paste, collapse = " ")
+```
+
+```{r}
+lcf100[[59]][["TOKEN"]] %>% 
+  paste(collapse = " ")
+synt.units.fcn(lcf100[[59]])[["DEP_CLAUSES"]][["TOKENS"]] %>%
+  sapply(., paste, collapse = " ")
+```
+
+
+Direct interrogatives in the form *est-ce que* are not considered the head of subordinate clauses. Rather, the head of a clause is the finite verb dominated by *est*  as in interrogatives formed by inversion. 
+
+```{r}
+lcf100[[14]][["TOKEN"]] %>% 
+  paste(collapse = " ")
+synt.units.fcn(lcf100[[14]])[["DEP_CLAUSES"]][["TOKENS"]] %>%
+  sapply(., paste, collapse = " ")
+```
+
+Citations or reported speech enclosed with French guillmets («»), single or double quotation marks are also considered subordinate clauses.  
+
+
+## Coordinated clauses
+
+Coordinated clauses are clauses which are not semantically and/or structurally dependent on a super-ordinate syntactic structure but are conjoined to one or more clauses of syntactically equal status. They may be joined by a coordinating conjunction (e.g. *et*; 'and'), punctuation (e.g. semi-colon, colon, comma) or by juxtaposition and must contain both a subject and a finite verb. They are extracted from the root nodes of finite verbs which are not themselves dependent on subordinate conjunctions or pronouns (to exclude dependent clauses). 
+
+```{r}
+lcf100[[97]][["TOKEN"]] %>% 
+  paste(collapse = " ")
+synt.units.fcn(lcf100[[97]])[["CO_CLAUSES"]][["TOKENS"]] %>%
+  sapply(., paste, collapse = " ")
+```
+
+## T-units {#tunits}
+
+We use Hunt’s [-@Hunt1970: 199] definition of a t-unit as “one main clause plus any subordinate clause or non-clausal structure that is attached to or embedded in it”. Identifying t-units therefore depends on the identification of coordinated clauses since a sentence can only contain multiple t-units if it contains multiple coordinated clauses. A sentence that does not contain any coordinated clauses simply has one t-unit, provided it has at least one finite verb. Consistent with Hunt [-@Hunt1965], we do not classify sentence fragments (clauses without a finite verb) as t-units. Therefore, if a sentence has no coordinated clauses (and one finite verb) it has one t-unit. All additional coordinated clauses within a sentence are separate t-units. The three coordinated clauses in the sentence above therefore account for three t-units.
+
+```{r}
+synt.units.fcn(lcf100[[97]])[["CO_CLAUSES"]][["NUMBER"]] 
+synt.units.fcn(lcf100[[97]])[["T_UNITS"]][["NUMBER"]] 
+```
+
+
+
+## Noun phrases
+
+We use Lu's [-@Lu2010] definition of a noun phrase as a *complex nominal* [see @Cooper1976] which includes: nouns plus adjective(s), possessive(s), prepositional phrase(s), relative clause(s), participle(s), or appositive(s), nominal clause(s). We also include words (nouns, adverbs and pronouns) that are have a determiner (e.g. *une maison* 'a house';  *cet autre* 'this other') in our definition. Following Lu [-@Lu2010] and Cooper [-@Cooper1976], we also include gerunds and infinitives in subject position. The root nodes of noun phrases therefore include (within each t-unit) common nouns and proper nouns as well as gerunds and non-finite verbs when they are dependent on a finite verb and have a subject dependency label. 
+
+
+```{r}
+lcf400[[358]][["TOKEN"]] %>% 
+  paste(collapse = " ")
+synt.units.fcn(lcf400[[358]])[["NOUN_PHRASES"]][["TOKENS"]] %>%
+  sapply(., paste, collapse = " ")
+```
+
+## Verb phrases
+
+As in Lu [-@Lu2010] we count both finite and non-finite verb phrases. These are extracted by taking all words which are dependent on a verb within a t-unit. Auxiliary verbs do not constitute their own verb phrase but are considered part of the main verb they modify. However, verb phrases with modal verbs are considered separate verb phrases. After extracting the dependents of each verb node, the units are cleaned by removing subjects and pre-verbal modifiers. When two verbs are coordinated they are also considered a singular verb phrase (e.g. *ne sont pas d'accord et présentent de solutions différents*; 'do not agree and present different solutions').
+
+```{r}
+lcf400[[31]][["TOKEN"]] %>% 
+  paste(collapse = " ")
+synt.units.fcn(lcf400[[31]])[["VERB_PHRASES"]][["TOKENS"]] %>%
+  sapply(., paste, collapse = " ")
+```
+
+# References
+
+
