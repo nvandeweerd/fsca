@@ -62,9 +62,9 @@ node_deps.fcn <- function (x, graph) {
 
   node_deps <-as.numeric( #
     names(
-      V( #get the vertices
-        induced.subgraph( #of the subgraph
-          graph,subcomponent(graph, x, mode = "in"))))) #which x is the main node
+      igraph::V( #get the vertices
+        igraph::induced.subgraph( #of the subgraph
+          graph,igraph::subcomponent(graph, x, mode = "in"))))) #which x is the main node
   return(node_deps)
 }
 #function to exclude certain parts of a segment
@@ -88,20 +88,30 @@ exclude.fcn <- function(x,y, keep = "exclude") {
     }}
 }
 #function to extract noun phrases
-np.fcn <- function(TU, coordinators, punct) {
+np.fcn <- function(TU, coordinators, punct,
+                   colnames = c(TOKEN = "TOKEN",
+                                POSITION = "POSITION",
+                                DEP_ON = "DEP_ON",
+                                DEP_TYPE = "DEP_TYPE",
+                                POS = "POS.MELT",
+                                LEMMA = "LEMMA",
+                                DEP_ON_POS = "DEP_ON_POS",
+                                DEP_ON_DEPTYPE = "DEP_ON_DEPTYPE",
+                                DEP_ON_LEMMA = "DEP_ON_LEMMA")) {
 
-  TOKEN <-"TOKEN" #name of the column with the tokens
-  POSITION <- "POSITION" #name of columnn with the word index
-  DEP_ON <-  "DEP_ON" #name of column with the dependency heads
-  DEP_TYPE <-"DEP_TYPE" #name of column with the dependency relations
-  POS <- "POS.MELT"  #name of column with the part of speech tags
-  LEMMA <- "LEMMA" #name of column with the lemmas
-  DEP_ON_POS <- "DEP_ON_POS"
-  DEP_ON_DEPTYPE <- "DEP_ON_DEPTYPE"
-  DEP_ON_LEMMA <- "DEP_ON_LEMMA"
+  TOKEN <- colnames["TOKEN"]
+  POSITION <- colnames["POSITION"]
+  DEP_ON <-  colnames["DEP_ON"]
+  DEP_TYPE <- colnames["DEP_TYPE"]
+  POS <- colnames["POS"]
+  LEMMA <- colnames["LEMMA"]
+  DEP_ON_POS <- colnames["DEP_ON_POS"]
+  DEP_ON_DEPTYPE <- colnames["DEP_ON_DEPTYPE"]
+  DEP_ON_LEMMA <- colnames["DEP_ON_LEMMA"]
+
 
   #graph of t-unit
-  g_tu <- graph_from_data_frame(TU[,c(POSITION, DEP_ON)])
+  g_tu <- igraph::graph_from_data_frame(TU[,c(POSITION, DEP_ON)])
   #common nouns and proper nouns serve as the root nodes
   nouns <- TU[[POSITION]][which(TU[[POS]] %in% c("NC", "NPP"))]
   #as well as infinitives and gerunds in subject position
@@ -137,19 +147,28 @@ np.fcn <- function(TU, coordinators, punct) {
   return(NOUN_PHRASES)
 }
 #function to extract verb phrases
-vp.fcn <- function(TU, estceque, coordinators, punct) {
-  TOKEN <-"TOKEN" #name of the column with the tokens
-  POSITION <- "POSITION" #name of columnn with the word index
-  DEP_ON <-  "DEP_ON" #name of column with the dependency heads
-  DEP_TYPE <-"DEP_TYPE" #name of column with the dependency relations
-  POS <- "POS.MELT"  #name of column with the part of speech tags
-  LEMMA <- "LEMMA" #name of column with the lemmas
-  DEP_ON_POS <- "DEP_ON_POS"
-  DEP_ON_DEPTYPE <- "DEP_ON_DEPTYPE"
-  DEP_ON_LEMMA <- "DEP_ON_LEMMA"
+vp.fcn <- function(TU, estceque, coordinators, punct,
+                   colnames = c(TOKEN = "TOKEN",
+                                POSITION = "POSITION",
+                                DEP_ON = "DEP_ON",
+                                DEP_TYPE = "DEP_TYPE",
+                                POS = "POS.MELT",
+                                LEMMA = "LEMMA",
+                                DEP_ON_POS = "DEP_ON_POS",
+                                DEP_ON_DEPTYPE = "DEP_ON_DEPTYPE",
+                                DEP_ON_LEMMA = "DEP_ON_LEMMA")) {
+  TOKEN <- colnames["TOKEN"]
+  POSITION <- colnames["POSITION"]
+  DEP_ON <-  colnames["DEP_ON"]
+  DEP_TYPE <- colnames["DEP_TYPE"]
+  POS <- colnames["POS"]
+  LEMMA <- colnames["LEMMA"]
+  DEP_ON_POS <- colnames["DEP_ON_POS"]
+  DEP_ON_DEPTYPE <- colnames["DEP_ON_DEPTYPE"]
+  DEP_ON_LEMMA <- colnames["DEP_ON_LEMMA"]
 
   #graph of t-unit
-  g_tu <- graph_from_data_frame(TU[,c(POSITION, DEP_ON)])
+  g_tu <- igraph::graph_from_data_frame(TU[,c(POSITION, DEP_ON)])
 
 
   verbs <-  TU[[POSITION]][which(
@@ -264,30 +283,57 @@ named.list.fcn <- function(...) {
 #function to split a segment at a given place
 splitat.fcn <- function(x, pos) unname(split(x, cumsum(seq_along(x) %in% pos)))
 
-#' Generate a list of syntactic units
+#' Generate a List of Syntactic Units
+#'
+#' This function returns a list of syntactic units (sentences, t-units, clauses
+#' dependent clauses, coordinated clauses, verb phrases and noun phrases) from
+#' a dependency parsed sentence in CONLL format.
 #'
 #' @param sentence A data frame which contains a sentence in CONLL format
+#' @param colnames A named vector containing the names of the following columns:
+#'
+#' - TOKEN: name of the column with the tokens
+#' - POSITION: name of columnn with the word index
+#' - DEP_ON: name of column with the dependency heads
+#' - DEP_TYPE: name of column with the dependency relations
+#' - POS: name of column with the part of speech tags
+#' - LEMMA: name of column with the lemmas
 
+#' @return The output is a list containing, for each  syntactic
+#' unit:
+#'
+#' - the NUMBER identified
+#' - the LENGTH (in tokens) for each identified unit
+#' - the TOKENS contained within each unit
+#'
 
-synt.units.fcn <- function(sentence){
-#function to extract syntactic units from dependency parsed sentence in CONLL format
+synt.units.fcn <- function(sentence,
+                           colnames = c(TOKEN = "TOKEN",
+                                POSITION = "POSITION",
+                                DEP_ON = "DEP_ON",
+                                DEP_TYPE = "DEP_TYPE",
+                                POS = "POS.MELT",
+                                LEMMA = "LEMMA")){
 
 ##Prepare dataframe####
-    #add column names as  variables
-    #Note: this also needs to be done within the np.fcn and vp.fcn in helper_syntactic.R)
-    TOKEN <-"TOKEN" #name of the column with the tokens
-    POSITION <- "POSITION" #name of columnn with the word index
-    DEP_ON <-  "DEP_ON" #name of column with the dependency heads
-    DEP_TYPE <-"DEP_TYPE" #name of column with the dependency relations
-    POS <- "POS.MELT"  #name of column with the part of speech tags
-    LEMMA <- "LEMMA" #name of column with the lemmas
+    #add column names as variables
+    TOKEN <- colnames["TOKEN"]
+    POSITION <- colnames["POSITION"]
+    DEP_ON <-  colnames["DEP_ON"]
+    DEP_TYPE <- colnames["DEP_TYPE"]
+    POS <- colnames["POS"]
+    LEMMA <- colnames["LEMMA"]
     #add a column to the df with the information from dependencies
     sentence <- colref_add.fcn(sentence, DEP_ON , "DEP_ON_POS", POS)
     sentence <- colref_add.fcn(sentence, DEP_ON , "DEP_ON_DEPTYPE", DEP_TYPE)
     sentence <- colref_add.fcn(sentence, DEP_ON , "DEP_ON_LEMMA", LEMMA)
-    DEP_ON_POS <- "DEP_ON_POS"
-    DEP_ON_DEPTYPE <- "DEP_ON_DEPTYPE"
-    DEP_ON_LEMMA <- "DEP_ON_LEMMA"
+    colnames <- c(colnames, DEP_ON_POS = "DEP_ON_POS",
+                  DEP_ON_DEPTYPE = "DEP_ON_DEPTYPE",
+                  DEP_ON_LEMMA = "DEP_ON_LEMMA")
+    DEP_ON_POS <- colnames["DEP_ON_POS"]
+    DEP_ON_DEPTYPE <- colnames["DEP_ON_DEPTYPE"]
+    DEP_ON_LEMMA <- colnames["DEP_ON_LEMMA"]
+
     #get punctuation
     punct <- as.numeric(sentence[[POSITION]][which(sentence[[POS]] == "PONCT")])
     #get coordinators
@@ -299,7 +345,7 @@ synt.units.fcn <- function(sentence){
     #check for 'il y a' clauses
     ilya <- grepl("il y avoir", paste(sentence[[LEMMA]], collapse = " "))
     #make a graph for the sentence
-    g <- graph_from_data_frame(sentence[,c(POSITION, DEP_ON)])
+    g <- igraph::graph_from_data_frame(sentence[,c(POSITION, DEP_ON)])
 
 ##Sentences####
     #all tokens except punctuation
@@ -519,7 +565,7 @@ synt.units.fcn <- function(sentence){
 
     NOUN_PHRASES <- purrr::flatten(lapply(TUs, function(x)np.fcn(x,
                                                                  coordinators = coordinators,
-                                                                 punct = punct) ))
+                                                                 punct = punct, colnames) ))
 
 ##Verb Phrases####
 

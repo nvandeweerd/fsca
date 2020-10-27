@@ -2,13 +2,36 @@
 % Please edit documentation in R/synt.units.fcn.R
 \name{synt.units.fcn}
 \alias{synt.units.fcn}
-\title{Generate a list of syntactic units}
+\title{Generate a List of Syntactic Units}
 \usage{
-synt.units.fcn(sentence)
+synt.units.fcn(sentence, colnames = c(TOKEN = "TOKEN", POSITION =
+  "POSITION", DEP_ON = "DEP_ON", DEP_TYPE = "DEP_TYPE", POS = "POS.MELT",
+  LEMMA = "LEMMA"))
 }
 \arguments{
 \item{sentence}{A data frame which contains a sentence in CONLL format}
+
+\item{colnames}{A named vector containing the names of the following columns:
+\itemize{
+\item TOKEN: name of the column with the tokens
+\item POSITION: name of columnn with the word index
+\item DEP_ON: name of column with the dependency heads
+\item DEP_TYPE: name of column with the dependency relations
+\item POS: name of column with the part of speech tags
+\item LEMMA: name of column with the lemmas
+}}
+}
+\value{
+The output is a list containing, for each  syntactic
+unit:
+\itemize{
+\item the NUMBER identified
+\item the LENGTH (in tokens) for each identified unit
+\item the TOKENS contained within each unit
+}
 }
 \description{
-Generate a list of syntactic units
+This function returns a list of syntactic units (sentences, t-units, clauses
+dependent clauses, coordinated clauses, verb phrases and noun phrases) from
+a dependency parsed sentence in CONLL format.
 }
