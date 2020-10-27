@@ -289,11 +289,11 @@ splitat.fcn <- function(x, pos) unname(split(x, cumsum(seq_along(x) %in% pos)))
 #' dependent clauses, coordinated clauses, verb phrases and noun phrases) from
 #' a dependency parsed sentence in CONLL format.
 #'
-#' @param sentence A data frame which contains a sentence in CONLL format
+#' @param df A data frame which contains a sentence in CONLL format
 #' @param colnames A named vector containing the names of the following columns:
 #'
 #' - TOKEN: name of the column with the tokens
-#' - POSITION: name of columnn with the word index
+#' - POSITION: name of column with the word index
 #' - DEP_ON: name of column with the dependency heads
 #' - DEP_TYPE: name of column with the dependency relations
 #' - POS: name of column with the part of speech tags
@@ -302,12 +302,13 @@ splitat.fcn <- function(x, pos) unname(split(x, cumsum(seq_along(x) %in% pos)))
 #' @return The output is a list containing, for each  syntactic
 #' unit:
 #'
-#' - the NUMBER identified
-#' - the LENGTH (in tokens) for each identified unit
-#' - the TOKENS contained within each unit
+#' - the NUMBER identified units (integer)
+#' - the LENGTHS of units (integer vector)
+#' - the TOKENS belonging to each unit (list of character vectors)
 #'
+#'@example /examples/example.R
 
-synt.units.fcn <- function(sentence,
+synt.units.fcn <- function(df,
                            colnames = c(TOKEN = "TOKEN",
                                 POSITION = "POSITION",
                                 DEP_ON = "DEP_ON",
@@ -324,9 +325,9 @@ synt.units.fcn <- function(sentence,
     POS <- colnames["POS"]
     LEMMA <- colnames["LEMMA"]
     #add a column to the df with the information from dependencies
-    sentence <- colref_add.fcn(sentence, DEP_ON , "DEP_ON_POS", POS)
-    sentence <- colref_add.fcn(sentence, DEP_ON , "DEP_ON_DEPTYPE", DEP_TYPE)
-    sentence <- colref_add.fcn(sentence, DEP_ON , "DEP_ON_LEMMA", LEMMA)
+    df <- colref_add.fcn(df, DEP_ON , "DEP_ON_POS", POS)
+    df <- colref_add.fcn(df, DEP_ON , "DEP_ON_DEPTYPE", DEP_TYPE)
+    df <- colref_add.fcn(df, DEP_ON , "DEP_ON_LEMMA", LEMMA)
     colnames <- c(colnames, DEP_ON_POS = "DEP_ON_POS",
                   DEP_ON_DEPTYPE = "DEP_ON_DEPTYPE",
                   DEP_ON_LEMMA = "DEP_ON_LEMMA")
@@ -335,76 +336,76 @@ synt.units.fcn <- function(sentence,
     DEP_ON_LEMMA <- colnames["DEP_ON_LEMMA"]
 
     #get punctuation
-    punct <- as.numeric(sentence[[POSITION]][which(sentence[[POS]] == "PONCT")])
+    punct <- as.numeric(df[[POSITION]][which(df[[POS]] == "PONCT")])
     #get coordinators
-    coordinators <- as.numeric(sentence[[POSITION]][which(sentence[[POS]] == "CC")])
+    coordinators <- as.numeric(df[[POSITION]][which(df[[POS]] == "CC")])
     #get citations
-    citations <- unlist(citations.fcn(sentence))
+    citations <- unlist(citations.fcn(df))
     #check if there are direct interogatives
-    estceque <- grepl("être ce que", paste(sentence[[LEMMA]], collapse = " "))
+    estceque <- grepl("être ce que", paste(df[[LEMMA]], collapse = " "))
     #check for 'il y a' clauses
-    ilya <- grepl("il y avoir", paste(sentence[[LEMMA]], collapse = " "))
-    #make a graph for the sentence
-    g <- igraph::graph_from_data_frame(sentence[,c(POSITION, DEP_ON)])
+    ilya <- grepl("il y avoir", paste(df[[LEMMA]], collapse = " "))
+    #make a graph for the df
+    g <- igraph::graph_from_data_frame(df[,c(POSITION, DEP_ON)])
 
 ##Sentences####
     #all tokens except punctuation
-    SENTENCES <- list(as.numeric(sentence[[POSITION]][which(! sentence[[POSITION]] %in% punct)]))
+    SENTENCES <- list(as.numeric(df[[POSITION]][which(! df[[POSITION]] %in% punct)]))
 
 ##Subordinate Clauses####
     #subordinating conjunctions serve as the root nodes
-    subordinators <-  sentence[[POSITION]][which(
-                                            (sentence[[POS]] %in% c("CS")) &
-                                            (!sentence[[DEP_TYPE]] %in% c("root"))  )]
+    subordinators <-  df[[POSITION]][which(
+                                            (df[[POS]] %in% c("CS")) &
+                                            (!df[[DEP_TYPE]] %in% c("root"))  )]
     if (length(subordinators) != 0) {
-    #not parce que if it is the root of the sentence
+    #not parce que if it is the root of the df
     subordinators <- subordinators [! sapply(subordinators, function (x) any (
-                                          (sentence[[POSITION]] == x) &
-                                          (sentence[[DEP_ON_DEPTYPE]] == "root") &
-                                          (sentence[[DEP_ON_LEMMA]] == "parce"))  )]}
+                                          (df[[POSITION]] == x) &
+                                          (df[[DEP_ON_DEPTYPE]] == "root") &
+                                          (df[[DEP_ON_LEMMA]] == "parce"))  )]}
     #est-ce que
     if (estceque == TRUE) {
-      subordinators <- subordinators[! sapply(subordinators, function(x) any((sentence[[POSITION]] == x) &
-                                                       (sentence[[DEP_TYPE]] == "obj") &
-                                                       (sentence[[DEP_ON_LEMMA]] == "être") ))] }
+      subordinators <- subordinators[! sapply(subordinators, function(x) any((df[[POSITION]] == x) &
+                                                       (df[[DEP_TYPE]] == "obj") &
+                                                       (df[[DEP_ON_LEMMA]] == "être") ))] }
     SUB_CLAUSES <- extract.fcn(subordinators, exclude = NULL, g, punct)
 
     #il y a clauses
     if (ilya == TRUE) {
-      ilya_node <-sentence[[DEP_ON]][which(
-                                              (sentence[[LEMMA]] == c("y")) &
-                                              (sentence[[DEP_TYPE]] == c("aff")) &
-                                              (sentence[[DEP_ON_LEMMA]] == "avoir"))]
+      ilya_node <-df[[DEP_ON]][which(
+                                              (df[[LEMMA]] == c("y")) &
+                                              (df[[DEP_TYPE]] == c("aff")) &
+                                              (df[[DEP_ON_LEMMA]] == "avoir"))]
 
       ilya_node <- ilya_node[sapply(ilya_node, function(x) any(
                               #is there another finite verb dependant on the il y a clause
-                              ((sentence[[DEP_ON]] == x) &
-                              (sentence[[POS]] %in% c("V", "VPP", "VIMP", "VS"))) |
+                              ((df[[DEP_ON]] == x) &
+                              (df[[POS]] %in% c("V", "VPP", "VIMP", "VS"))) |
                               #or is the il y a clause dependent on another finite verb itself
-                              ((sentence[[POSITION]] == x) &
-                                (sentence[[DEP_ON_POS]] %in% c("V", "VPP", "VIMP", "VS")  )) ))]
+                              ((df[[POSITION]] == x) &
+                                (df[[DEP_ON_POS]] %in% c("V", "VPP", "VIMP", "VS")  )) ))]
       if (length(ilya_node) == 0) {ILYA_CLAUSES <- NULL
       }else{
-      ilya_rest <- lapply(ilya_node, function(x) sentence[[POSITION]][which(
-                                              (sentence[[DEP_ON]] == x) &
-                                              (sentence[[DEP_TYPE]] %in% c("mod", "obj")) )])
+      ilya_rest <- lapply(ilya_node, function(x) df[[POSITION]][which(
+                                              (df[[DEP_ON]] == x) &
+                                              (df[[DEP_TYPE]] %in% c("mod", "obj")) )])
       ILYA_CLAUSES <- extract.fcn(ilya_node, exclude = ilya_rest, g, punct)
       SUB_CLAUSES <- c(SUB_CLAUSES, ILYA_CLAUSES)}}
 
     #citations
-    sub_cit <- lapply(citations.fcn(sentence), function(x) x[which(! x %in% punct)])
+    sub_cit <- lapply(citations.fcn(df), function(x) x[which(! x %in% punct)])
     if(length(sub_cit) != 0) {SUB_CLAUSES <- c(SUB_CLAUSES, sub_cit)}
 
     #exclude clauses that are missing a subject
     if (! is.null(SUB_CLAUSES)) {
-      subjects <- lapply(SUB_CLAUSES, function(x) sentence[[POSITION]][which(
-        (sentence[[DEP_TYPE]] == "suj") &
-        (sentence[[POSITION]] %in% x))])
+      subjects <- lapply(SUB_CLAUSES, function(x) df[[POSITION]][which(
+        (df[[DEP_TYPE]] == "suj") &
+        (df[[POSITION]] %in% x))])
       SUB_CLAUSES <- exclude.fcn(SUB_CLAUSES, subjects, keep = "check")
       if (! is.null(SUB_CLAUSES)){
-      finverbs <- lapply(SUB_CLAUSES, function(x) sentence[[POSITION]][which(
-        (sentence[[POS]] %in%  c("V", "VPP", "VIMP", "VS")) &
-          (sentence[[POSITION]] %in% x))])
+      finverbs <- lapply(SUB_CLAUSES, function(x) df[[POSITION]][which(
+        (df[[POS]] %in%  c("V", "VPP", "VIMP", "VS")) &
+          (df[[POSITION]] %in% x))])
       SUB_CLAUSES <- exclude.fcn(SUB_CLAUSES, finverbs, keep = "check")}
       }
       subjects <- NULL
@@ -413,17 +414,17 @@ synt.units.fcn <- function(sentence,
 ##Relative Clauses####
 
     #pronouns and relative pronouns serve as the root nodes
-    relativizers <-  sentence[[POSITION]][which(
-        (sentence[[POS]] %in% c("PRO", "PROREL")) &
-        (!sentence[[DEP_ON_POS]] %in% c("PRO"))
+    relativizers <-  df[[POSITION]][which(
+        (df[[POS]] %in% c("PRO", "PROREL")) &
+        (!df[[DEP_ON_POS]] %in% c("PRO"))
           )]
 
     #as well as modified nouns
-    noun_rel <- sentence[[POSITION]][which(
-      (sentence[[DEP_TYPE]] %in% c("mod", "mod_rel", "dep")) &
-      (sentence[[DEP_ON_POS]] %in% c("NC", "NPP")) &
+    noun_rel <- df[[POSITION]][which(
+      (df[[DEP_TYPE]] %in% c("mod", "mod_rel", "dep")) &
+      (df[[DEP_ON_POS]] %in% c("NC", "NPP")) &
         #only finite verbs
-      (sentence[[POS]] %in% c("V", "VIMP", "VS", "VPP") )  )]
+      (df[[POS]] %in% c("V", "VIMP", "VS", "VPP") )  )]
 
 
     relativizers <- c(relativizers, noun_rel)
@@ -432,20 +433,20 @@ synt.units.fcn <- function(sentence,
     #exclude clauses that are missing a subject
     if (! is.null(REL_CLAUSES)) {
       subjects <- lapply(REL_CLAUSES, function(x)
-        sentence[[POSITION]][which((sentence[[DEP_TYPE]] == "suj") &
-                                  (sentence[[POSITION]] %in% x))])
+        df[[POSITION]][which((df[[DEP_TYPE]] == "suj") &
+                                  (df[[POSITION]] %in% x))])
       REL_CLAUSES <- exclude.fcn(REL_CLAUSES, subjects, keep = "check")
 
     #exclude coordinators
     if (! is.null(REL_CLAUSES)) {
-      rel_coord <-  lapply(REL_CLAUSES, function(x) sentence[[DEP_ON]][which(
-        (sentence[[DEP_TYPE]] %in% c("coord")) &
-          (sentence[[POSITION]] %in% x) )])
+      rel_coord <-  lapply(REL_CLAUSES, function(x) df[[DEP_ON]][which(
+        (df[[DEP_TYPE]] %in% c("coord")) &
+          (df[[POSITION]] %in% x) )])
       if (length(rel_coord) == length(relativizers)) {
       rel_coord <- mapply(function(x,y) x[which(x %in% y)], rel_coord, relativizers)
-      rel_coord <-  lapply(rel_coord, function(x) sentence[[POSITION]][which(
-        (sentence[[DEP_TYPE]] %in% c("coord")) &
-          (sentence[[DEP_ON]] == x) )])
+      rel_coord <-  lapply(rel_coord, function(x) df[[POSITION]][which(
+        (df[[DEP_TYPE]] %in% c("coord")) &
+          (df[[DEP_ON]] == x) )])
       REL_CLAUSES <- exclude.fcn(REL_CLAUSES, rel_coord)}
         }
       }
@@ -463,54 +464,54 @@ synt.units.fcn <- function(sentence,
 
 ##Coordinated Clauses####
     ##finite verbs
-    finverbs <-  sentence[[POSITION]][which(
-      (sentence[[POS]] %in% c("V", "VPP", "VIMP", "VS")) &
+    finverbs <-  df[[POSITION]][which(
+      (df[[POS]] %in% c("V", "VPP", "VIMP", "VS")) &
         #not auxilliaries
-        (! sentence[[DEP_TYPE]] %in% c("aux_pass","aux_tps", "ato")) &
+        (! df[[DEP_TYPE]] %in% c("aux_pass","aux_tps", "ato")) &
         #not itself dependent on a relative pronoun or subordinating conjunction
-        (! sentence[[DEP_ON_POS]] %in% c("PROREL", "PROWH", "CS")) &
-        (! sentence[[POSITION]] %in% citations) )]
+        (! df[[DEP_ON_POS]] %in% c("PROREL", "PROWH", "CS")) &
+        (! df[[POSITION]] %in% citations) )]
 
       if (length(finverbs) != 0 ){#must have a subject
-      finverbs <- finverbs[sapply(finverbs, function(x) any((sentence[[DEP_ON]] == x) &
-                                                              (sentence[[DEP_TYPE]] %in% c("suj")) ))]}
+      finverbs <- finverbs[sapply(finverbs, function(x) any((df[[DEP_ON]] == x) &
+                                                              (df[[DEP_TYPE]] %in% c("suj")) ))]}
       if(length(finverbs) != 0){#must not have a relative pronoun as a daughter
-      finverbs <- finverbs[! sapply(finverbs, function(x) any((sentence[[DEP_ON]] == x) &
-                                                                (sentence[[POS]] %in% c("PROREL", "PROWH")) ))]}
+      finverbs <- finverbs[! sapply(finverbs, function(x) any((df[[DEP_ON]] == x) &
+                                                                (df[[POS]] %in% c("PROREL", "PROWH")) ))]}
       if(length(finverbs) != 0){#! relative pronoun < preposition < verb (ex: 'sans que')
-      prepositions <- lapply(finverbs, function(x) sentence[[POSITION]][which(
-                                                                (sentence[[DEP_ON]] == x) &
-                                                                (sentence[[POS]] %in% c("P")) )])
+      prepositions <- lapply(finverbs, function(x) df[[POSITION]][which(
+                                                                (df[[DEP_ON]] == x) &
+                                                                (df[[POS]] %in% c("P")) )])
       if (length(prepositions) != 0){
 
-        prep_rel <- sapply(prepositions, function(x) sentence[[POSITION]][which(
-                                                                (sentence[[DEP_ON]] %in% x) &
-                                                               (sentence[[POS]] %in% c("PROREL", "PROWH")) )])
+        prep_rel <- sapply(prepositions, function(x) df[[POSITION]][which(
+                                                                (df[[DEP_ON]] %in% x) &
+                                                               (df[[POS]] %in% c("PROREL", "PROWH")) )])
         finverbs <- finverbs[!sapply(prep_rel, length) > 0 ]}
       }
 
     #disregard il y a clauses
     if (ilya == TRUE) {
-      finverbs <- finverbs[! sapply(finverbs, function(x) any((sentence[[DEP_ON]] == x) &
-                                                       (sentence[[LEMMA]] == "y") &
-                                                       (sentence[[DEP_TYPE]] == "aff") &
-                                                       (sentence[[DEP_ON_LEMMA]] == "avoir") ))] }
+      finverbs <- finverbs[! sapply(finverbs, function(x) any((df[[DEP_ON]] == x) &
+                                                       (df[[LEMMA]] == "y") &
+                                                       (df[[DEP_TYPE]] == "aff") &
+                                                       (df[[DEP_ON_LEMMA]] == "avoir") ))] }
 
 
-    #if there are less than 2 finite verbs, the sentence has no coordinated clauses
+    #if there are less than 2 finite verbs, the df has no coordinated clauses
       if (length(finverbs) < 2) {CO_CLAUSES <- NULL
       }else{
 
-    #sentences that are split with a colon (parataxis)
-    colon <- as.numeric(sentence[[POSITION]][which(
-        sentence[[LEMMA]] == ":")])
+    #dfs that are split with a colon (parataxis)
+    colon <- as.numeric(df[[POSITION]][which(
+        df[[LEMMA]] == ":")])
           if (length(colon) != 0) {
-            juxtapositions <- splitat.fcn(sentence[[POSITION]], colon)
+            juxtapositions <- splitat.fcn(df[[POSITION]], colon)
           if (length(juxtapositions) == length(finverbs)) {
             CO_CLAUSES <- lapply(juxtapositions, function(x)x[which(! x %in% punct)])}
               }else{juxtapositions <- NULL}
 
-      #if the number of finite verbs != the number of juxtaposed sentences,
+      #if the number of finite verbs != the number of juxtaposed dfs,
       #then use finite verbs as the root nodes
       if (length(finverbs) != length(juxtapositions)) {
         CO_CLAUSES <- extract.fcn(finverbs, exclude = NULL, g, punct)
@@ -522,12 +523,12 @@ synt.units.fcn <- function(sentence,
                   CO_CLAUSES[[i]] <- unlist(sapply(CO_CLAUSES[[i]], function(x) x[which(
                     ! x %in% unlist(CO_CLAUSES[subset]))]))}
                    }
-        #reorder the clauses based on the position of the first word (same order as sentence)
+        #reorder the clauses based on the position of the first word (same order as df)
         CO_CLAUSES <- CO_CLAUSES[order(sapply(CO_CLAUSES, `[[`, 1))] }
         #if the coordinator is in the final position of a clause, move it to the first position of the following clause
-        coords <- lapply(CO_CLAUSES, function(x) sentence[[POSITION]][which(#which coordinators in the last position
-                                                      (sentence[[POSITION]] %in% tail(x, 1)) &
-                                                      (sentence[[POS]] %in% c("CC", "P")) )])
+        coords <- lapply(CO_CLAUSES, function(x) df[[POSITION]][which(#which coordinators in the last position
+                                                      (df[[POSITION]] %in% tail(x, 1)) &
+                                                      (df[[POS]] %in% c("CC", "P")) )])
                   #move coordinators to first position of following clause
                   for (i in seq(length(CO_CLAUSES)-1)) {
                   if (length(coords[[i]]) != 0)
@@ -539,16 +540,16 @@ synt.units.fcn <- function(sentence,
 
 ##T-units####
     #finite verbs serve as the root nodes
-    finverbs <-  sentence[[POSITION]][which(
-        (sentence[[POS]] %in% c("V", "VPP", "VIMP")) &
-        (! sentence[[DEP_TYPE]] %in% c("aux_caus","aux_pass","aux_tps")) )]
+    finverbs <-  df[[POSITION]][which(
+        (df[[POS]] %in% c("V", "VPP", "VIMP")) &
+        (! df[[DEP_TYPE]] %in% c("aux_caus","aux_pass","aux_tps")) )]
     #if there are no coordinated clauses
     if (length(CO_CLAUSES) == 0) {
       #and there are no finite verbs, then there are no T-units
       if (length(unlist(finverbs)) == 0) {
           T_UNITS <- NULL
-        #if there are no coordinated clauses but there is a finite verb, the whole sentence is the t-unit
-        }else {T_UNITS <- list(as.numeric(sentence[[POSITION]][which(! sentence[[POSITION]] %in% punct)]))}
+        #if there are no coordinated clauses but there is a finite verb, the whole df is the t-unit
+        }else {T_UNITS <- list(as.numeric(df[[POSITION]][which(! df[[POSITION]] %in% punct)]))}
       #otherwise, the t-units are the coordinated clauses
       }else {T_UNITS <- CO_CLAUSES}
 
@@ -560,8 +561,8 @@ synt.units.fcn <- function(sentence,
 
 ##Noun Phrases####
     #Noun phrases are extracted from within t-units
-    if (length(T_UNITS) > 1) {TUs <- lapply(T_UNITS, function(x) sentence[unlist(as.numeric(x)),])
-    }else{TUs <- list(sentence)}
+    if (length(T_UNITS) > 1) {TUs <- lapply(T_UNITS, function(x) df[unlist(as.numeric(x)),])
+    }else{TUs <- list(df)}
 
     NOUN_PHRASES <- purrr::flatten(lapply(TUs, function(x)np.fcn(x,
                                                                  coordinators = coordinators,
@@ -577,7 +578,7 @@ synt.units.fcn <- function(sentence,
 
 ##Results####
     units <- named.list.fcn(SENTENCES, CLAUSES, DEP_CLAUSES, CO_CLAUSES, T_UNITS, NOUN_PHRASES, VERB_PHRASES)
-    synt.units <- lapply(units, results.fcn, sentence)
+    synt.units <- lapply(units, results.fcn, df)
 
   return(synt.units)
 }
