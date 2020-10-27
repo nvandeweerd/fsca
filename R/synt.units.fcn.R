@@ -9,7 +9,6 @@
 
 
 
-
 #import xml file (parsed texts) as data frame
 xmlconll.fcn <- function(file) {
   current.text <- scan(file, what = character(), sep = "\n" ) #read in XML files
@@ -61,7 +60,6 @@ colref_add.fcn <- function(x, from, to, what) {
 #function to get the dependencies from a given node
 node_deps.fcn <- function (x, graph) {
 
-  require(igraph)
   node_deps <-as.numeric( #
     names(
       V( #get the vertices
@@ -223,23 +221,20 @@ remove_empty.fcn <- function(list) {
 }
 #function to identify citations/quoted speech
 citations.fcn <- function(x, POSITION = "POSITION", LEMMA = "LEMMA") {
-  #load exact.matches.2 function from Gries (2016)
-  source("http://stgries.faculty.linguistics.ucsb.edu/exact.matches.2.r")
+
   if (grepl("(«[^»]+»)|(\"[^\"]+\")|(\'[^\']+\')", paste(x[[LEMMA]], collapse = " "))) {
     positions <- paste(paste(x[[POSITION]], x[[LEMMA]], sep = "_"), collapse = " ")
     sch.ex <- "(\\d+_«[^»]+»)|(\\d+_\"[^\"]+\")|(\\d+_\'[^\']+\')"
-    citations <- exact.matches.2(sch.ex, positions, gen.conc.output = FALSE)[[1]]
+    citations <- regmatches(positions, regexpr(sch.ex, positions))
     citations <- lapply(citations, function(x)  unlist(strsplit(gsub("(\\d+)_[^ ]+", "\\1", x), split = " ")))
     return(citations)
   }else{return(NULL)}
 }
 #function to identify coordinated phrases
 coord_phrases.fcn <- function(x, g, pos, POSITION = "POSITION", POS = "POS.MELT") {
-  #load exact.matches.2 function from Gries (2016)
-  source("http://stgries.faculty.linguistics.ucsb.edu/exact.matches.2.r")
   positions <- paste(paste(x[[POSITION]], x[[POS]], sep = "_"), collapse = " ")
   sch.ex <- paste0("\\d+_", pos, " \\d+_CC (\\d+_DET)? \\d+_", pos)
-  coord_phrases <- exact.matches.2(sch.ex, positions, gen.conc.output = FALSE)[[1]]
+  coord_phrases <- regmatches(positions, regexpr(sch.ex, positions))
   coord_phrases <- lapply(coord_phrases, function(x)  unlist(strsplit(gsub("(\\d+)_[^ ]+", "\\1", x), split = " ")))
   coord_phrases <- lapply(coord_phrases, function(x) x[c(1, length(x))])
   coord_phrases <- lapply(coord_phrases, function(x) c(unlist(sapply(unlist(x), node_deps.fcn, g), use.names = FALSE)))
@@ -276,9 +271,7 @@ splitat.fcn <- function(x, pos) unname(split(x, cumsum(seq_along(x) %in% pos)))
 
 synt.units.fcn <- function(sentence){
 #function to extract syntactic units from dependency parsed sentence in CONLL format
-  require(igraph); require(purrr)
-  #load exact.matches.2 function from Gries (2016)
-  source("http://stgries.faculty.linguistics.ucsb.edu/exact.matches.2.r")
+
 ##Prepare dataframe####
     #add column names as  variables
     #Note: this also needs to be done within the np.fcn and vp.fcn in helper_syntactic.R)
