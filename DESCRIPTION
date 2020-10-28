@@ -20,3 +20,5 @@ RoxygenNote: 6.1.1
 Imports: 
     igraph,
     purrr
+Suggests: 
+    testthat

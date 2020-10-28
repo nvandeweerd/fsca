@@ -44,6 +44,13 @@ synt.units.fcn(example)
 
 #The output of the function is a list which can be subset
 str(synt.units.fcn(example)[["VERB_PHRASES"]])
+# List of 3
+# $ NUMBER : int 3
+# $ LENGTHS: int [1:3] 11 8 5
+# $ TOKENS :List of 3
+# ..$ : chr [1:11] "prétendent" "qu'" "il" "est" ...
+# ..$ : chr [1:8] "est" "impossible" "de" "rééduquer" ...
+# ..$ : chr [1:5] "rééduquer" "un" "tel" "jeune" ...
 
 #subset further to return the counts, lengths or tokens
 synt.units.fcn(example)[["VERB_PHRASES"]][["NUMBER"]]
