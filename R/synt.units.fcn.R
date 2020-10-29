@@ -1,12 +1,6 @@
 #synt.units.fcn(): An R function to extract syntactic units from L2 French texts
 
-
-# install.packages("igraph")
-# install.packages("purrr")
-
-#load helper functions
-#helper functions for syntactic extraction function
-
+# Helper functions ####
 
 
 #import xml file (parsed texts) as data frame
@@ -283,11 +277,17 @@ named.list.fcn <- function(...) {
 #function to split a segment at a given place
 splitat.fcn <- function(x, pos) unname(split(x, cumsum(seq_along(x) %in% pos)))
 
+
+# Main functions ####
+
 #' Generate a List of Syntactic Units
 #'
 #' This function returns a list of syntactic units (sentences, t-units, clauses
 #' dependent clauses, coordinated clauses, verb phrases and noun phrases) from
 #' a dependency parsed sentence in CONLL format.
+#' @usage
+#' synt.units.fcn(df, colnames = c(TOKEN = "TOKEN", POSITION = "POSITION",
+#' DEP_ON = "DEP_ON", DEP_TYPE = "DEP_TYPE", POS = "POS.MELT", LEMMA = "LEMMA"))
 #'
 #' @param df A data frame which contains a sentence in CONLL format
 #' @param colnames A named vector containing the names of the following columns:
@@ -306,7 +306,8 @@ splitat.fcn <- function(x, pos) unname(split(x, cumsum(seq_along(x) %in% pos)))
 #' - the LENGTHS of units (integer vector)
 #' - the TOKENS belonging to each unit (list of character vectors)
 #'
-#'@example /examples/example.R
+#' @example /examples/example01.R
+#' @export
 
 synt.units.fcn <- function(df,
                            colnames = c(TOKEN = "TOKEN",
@@ -582,6 +583,88 @@ synt.units.fcn <- function(df,
 
   return(synt.units)
 }
+
+#' Extract elements from the list of all syntactc units
+#'
+#' This function is a wrapper function for `synt.units.fcn`
+#' @usage
+#' getUnits(df, colnames = c(TOKEN = "TOKEN", POSITION = "POSITION", DEP_ON =
+#'  "DEP_ON", DEP_TYPE = "DEP_TYPE", POS = "POS.MELT", LEMMA = "LEMMA"),
+#'  what = "all", units = c("SENTENCES", "CLAUSES", "CO_CLAUSES", "DEP_CLAUSES",
+#'  "T_UNITS", "NOUN_PHRASES", "VERB_PHRASES"), paste.tokens = FALSE)
+#'
+#' @param df a data frame which contains a sentence in CONLL format
+#' @param colnames a named vector containing the names of the following columns:
+#' - TOKEN: name of the column with the tokens
+#' - POSITION: name of column with the word index
+#' - DEP_ON: name of column with the dependency heads
+#' - DEP_TYPE: name of column with the dependency relations
+#' - POS: name of column with the part of speech tags
+#' - LEMMA: name of column with the lemmas
+#' @param what one of the following character strings:
+#' - "number": returns the number identified units (integer)
+#' - lengths": returns the lengths of units (integer vector)
+#' - "tokens": returns the tokens belonging to each unit (list of character vectors)
+#' @param units a vector containing the units to be extracted:
+#' - "SENTENCES": returns sentences
+#' - "CLAUSES": returns all clauses
+#' - "DEP_CLAUSES": returns all dependent clauses
+#' - "CO_CLAUSES": returns all coordinated clauses
+#' - "NOUN_PHRASES": returns all noun phrases
+#' - "VERB_PHRASES": returns all verb phrases
+#' @param paste.tokens a logical value indicating whether tokens be pasted
+#' together
+
+#' @return
+#' If `what` is "all" (the default) then the full output of `synt.units.fcn`
+#' will be returned as a list.
+#'
+#' If `what` is "number" then the number of identified units will be returned as
+#' a named vector.
+#'
+#' If `what` is "lengths" then the lengths of the identified units will be
+#' returned as a list of integer vectors.
+#'
+#' If `what` is "tokens" then the tokens belonging to each unit will be returned
+#' as a list of character vectors.
+
+#' @example /examples/example02.R
+#'
+#' @export
+
+getUnits <- function(df, colnames = c(TOKEN = "TOKEN",
+                                      POSITION = "POSITION",
+                                      DEP_ON = "DEP_ON",
+                                      DEP_TYPE = "DEP_TYPE",
+                                      POS = "POS.MELT",
+                                      LEMMA = "LEMMA"),
+                     what = "all",
+                     units = c("SENTENCES",
+                               "CLAUSES",
+                               "CO_CLAUSES",
+                               "DEP_CLAUSES",
+                               "T_UNITS",
+                               "NOUN_PHRASES",
+                               "VERB_PHRASES"),
+                     paste.tokens = FALSE){
+    list <- synt.units.fcn(df, colnames)
+      if(what == "all"){x <- list
+      if(paste.tokens == TRUE){
+        for (i in seq(length(x))){
+          x[[i]][[3]] <-  purrr::map(x[[i]][[3]] , paste, collapse = " ")
+        }
+      }
+      }
+      if(what == "number") {x <- sapply(list, `[[`, 1)[units]}
+      if(what == "lengths") {x <- lapply(list, `[[`, 2)[units]}
+      if(what == "tokens") {x <- lapply(list, `[[`, 3)[units]
+      if(paste.tokens == TRUE) {
+        x <- lapply(x, function(x) purrr::map(x, paste, collapse = " "))
+      }}
+    return(x)
+}
+
+
 
 
 

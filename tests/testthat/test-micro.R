@@ -22,3 +22,10 @@ test_that("Noun phrases", {
   expect_equal(df[["NOUN_PHRASES"]][["NUMBER"]], 9)
   expect_equal(df[["NOUN_PHRASES"]][["LENGTHS"]], c(4, 2, 3, 10, 6, 4, 2, 3, 2))
 })
+
+df <- synt.units.fcn(test.sents[["b.59.1"]])
+
+test_that("Verb phrases", {
+  expect_equal(df[["VERB_PHRASES"]][["NUMBER"]], 6)
+  expect_equal(df[["VERB_PHRASES"]][["LENGTHS"]], c(11, 7, 6, 6, 3, 6))
+})

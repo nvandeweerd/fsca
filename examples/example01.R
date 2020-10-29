@@ -1,5 +1,5 @@
 #example.csv is a csv containing a sentence in CONLL format
-example <- read.csv("tests/testthat/data/example.csv", stringsAsFactors = FALSE)
+example <- read.csv("examples/example.csv", stringsAsFactors = FALSE)
 
 #Run function (full analysis)
 synt.units.fcn(example)
