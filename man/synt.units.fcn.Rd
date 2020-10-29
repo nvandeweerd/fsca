@@ -35,15 +35,14 @@ dependent clauses, coordinated clauses, verb phrases and noun phrases) from
 a dependency parsed sentence in CONLL format.
 }
 \examples{
-#example.csv is a csv containing a sentence in CONLL format
-example <- read.csv("examples/example.csv", stringsAsFactors = FALSE)
+#`example`is a csv containing a sentence in CONLL format
+data(example)
 
 #Run function (full analysis)
 synt.units.fcn(example)
 
 #The output of the function is a list which can be subset
 str(synt.units.fcn(example)[["VERB_PHRASES"]])
-
 
 #subset further to return the counts, lengths or tokens
 synt.units.fcn(example)[["VERB_PHRASES"]][["NUMBER"]]
@@ -53,7 +52,9 @@ synt.units.fcn(example)[["VERB_PHRASES"]][["TOKENS"]]
 #Because NUMBER is an integer vector, calculations can also be done
 #directly on the output
 
-vp_len <- synt.units.fcn(example02)[["VERB_PHRASES"]][["LENGTHS"]]
+vp_len <- synt.units.fcn(example)[["VERB_PHRASES"]][["LENGTHS"]]
 mean(vp_len)
 sd(vp_len)
+
+
 }

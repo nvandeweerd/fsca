@@ -59,8 +59,9 @@ as a list of character vectors.
 This function is a wrapper function for \code{synt.units.fcn}
 }
 \examples{
-#example.csv is a csv containing a sentence in CONLL format
-example <- read.csv("examples/example.csv", stringsAsFactors = FALSE)
+
+#`example`is a csv containing a sentence in CONLL format
+data(example)
 
 #Run function (full analysis)
 getUnits(example)

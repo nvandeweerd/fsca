@@ -22,7 +22,7 @@ xmlconll.fcn <- function(file) {
   for (y in seq(nrow(df))){
     df$text[y] <- paste(df$sent[y], df$text[y], sep="\t")
   }
-  current.df <- read.table(text = df$text, #separate into columns
+  current.df <- utils::read.table(text = df$text, #separate into columns
                            sep = "\t",
                            colClasses = "character",
                            quote = "")[,c(1:9)]
@@ -133,7 +133,7 @@ np.fcn <- function(TU, coordinators, punct,
     NOUN_PHRASES <- c(NOUN_PHRASES, coord_NP)
   }
   #remove unit-final coordinators
-  final_coord <- lapply(lapply(NOUN_PHRASES, tail, 1), function(x) x[which( x %in% coordinators)])
+  final_coord <- lapply(lapply(NOUN_PHRASES, utils::tail, 1), function(x) x[which( x %in% coordinators)])
   NOUN_PHRASES <- exclude.fcn(NOUN_PHRASES, final_coord)
 
   #remove < 2 words
@@ -174,7 +174,7 @@ vp.fcn <- function(TU, estceque, coordinators, punct,
     verbs <- verbs[! sapply(verbs, function(x) any((TU[[DEP_ON]] == x) &
                                                      (TU[[LEMMA]] == "ce") &
                                                      (TU[[DEP_TYPE]] == "suj") &
-                                                     (TU[[DEP_ON_LEMMA]] == "être") ))] }
+                                                     (TU[[DEP_ON_LEMMA]] == "\u00EAtre") ))] }
 
   #remove subjects and verb modifiers
   subjects <- lapply(verbs, function(x) TU[[POSITION]][which(
@@ -198,7 +198,7 @@ vp.fcn <- function(TU, estceque, coordinators, punct,
     VERB_PHRASES <- c(VERB_PHRASES, coord_VP)
   }
   #remove unit-final coordinators
-  final_coord <- lapply(lapply(VERB_PHRASES, tail, 1), function(x) x[which( x %in% coordinators)])
+  final_coord <- lapply(lapply(VERB_PHRASES, utils::tail, 1), function(x) x[which( x %in% coordinators)])
   VERB_PHRASES <- exclude.fcn(VERB_PHRASES, final_coord)
 
   #delete units that are less than two words in length
@@ -235,9 +235,9 @@ remove_empty.fcn <- function(list) {
 #function to identify citations/quoted speech
 citations.fcn <- function(x, POSITION = "POSITION", LEMMA = "LEMMA") {
 
-  if (grepl("(«[^»]+»)|(\"[^\"]+\")|(\'[^\']+\')", paste(x[[LEMMA]], collapse = " "))) {
+  if (grepl("(\u00AB[^\u00BB]+\u00BB)|(\"[^\"]+\")|(\'[^\']+\')", paste(x[[LEMMA]], collapse = " "))) {
     positions <- paste(paste(x[[POSITION]], x[[LEMMA]], sep = "_"), collapse = " ")
-    sch.ex <- "(\\d+_«[^»]+»)|(\\d+_\"[^\"]+\")|(\\d+_\'[^\']+\')"
+    sch.ex <- "(\\d+_\u00AB[^\u00BB]+\u00BB)|(\\d+_\"[^\"]+\")|(\\d+_\'[^\']+\')"
     citations <- regmatches(positions, regexpr(sch.ex, positions))
     citations <- lapply(citations, function(x)  unlist(strsplit(gsub("(\\d+)_[^ ]+", "\\1", x), split = " ")))
     return(citations)
@@ -306,7 +306,7 @@ splitat.fcn <- function(x, pos) unname(split(x, cumsum(seq_along(x) %in% pos)))
 #' - the LENGTHS of units (integer vector)
 #' - the TOKENS belonging to each unit (list of character vectors)
 #'
-#' @example /examples/example01.R
+#' @example R/examples/example01.R
 #' @export
 
 synt.units.fcn <- function(df,
@@ -343,7 +343,7 @@ synt.units.fcn <- function(df,
     #get citations
     citations <- unlist(citations.fcn(df))
     #check if there are direct interogatives
-    estceque <- grepl("être ce que", paste(df[[LEMMA]], collapse = " "))
+    estceque <- grepl("\u00EAtre ce que", paste(df[[LEMMA]], collapse = " "))
     #check for 'il y a' clauses
     ilya <- grepl("il y avoir", paste(df[[LEMMA]], collapse = " "))
     #make a graph for the df
@@ -368,7 +368,7 @@ synt.units.fcn <- function(df,
     if (estceque == TRUE) {
       subordinators <- subordinators[! sapply(subordinators, function(x) any((df[[POSITION]] == x) &
                                                        (df[[DEP_TYPE]] == "obj") &
-                                                       (df[[DEP_ON_LEMMA]] == "être") ))] }
+                                                       (df[[DEP_ON_LEMMA]] == "\u00EAtre") ))] }
     SUB_CLAUSES <- extract.fcn(subordinators, exclude = NULL, g, punct)
 
     #il y a clauses
@@ -528,7 +528,7 @@ synt.units.fcn <- function(df,
         CO_CLAUSES <- CO_CLAUSES[order(sapply(CO_CLAUSES, `[[`, 1))] }
         #if the coordinator is in the final position of a clause, move it to the first position of the following clause
         coords <- lapply(CO_CLAUSES, function(x) df[[POSITION]][which(#which coordinators in the last position
-                                                      (df[[POSITION]] %in% tail(x, 1)) &
+                                                      (df[[POSITION]] %in% utils::tail(x, 1)) &
                                                       (df[[POS]] %in% c("CC", "P")) )])
                   #move coordinators to first position of following clause
                   for (i in seq(length(CO_CLAUSES)-1)) {
@@ -628,7 +628,7 @@ synt.units.fcn <- function(df,
 #' If `what` is "tokens" then the tokens belonging to each unit will be returned
 #' as a list of character vectors.
 
-#' @example /examples/example02.R
+#' @example R/examples/example02.R
 #'
 #' @export
 
