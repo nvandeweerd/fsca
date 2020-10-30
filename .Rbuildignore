@@ -1,2 +1,8 @@
 ^synt\.units\.fcn\.Rproj$
 ^\.Rproj\.user$
+^LICENSE\.md$
+^reports$
+^apa-6th-edition\.csl$
+^citations\.bib$
+^README\.Rmd$
+^README\.html$

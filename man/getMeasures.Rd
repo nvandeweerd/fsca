@@ -24,7 +24,7 @@ of data frames in CONLL format (see \code{\link{getUnits}})}
 \item{round.to}{integer for rounding measures}
 }
 \value{
-a named vector of syntactic complexity measures:
+a list of syntactic complexity measures:
 \itemize{
 \item MLS: mean length of sentence
 \item DIVS: standard deviation of sentence length

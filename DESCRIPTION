@@ -23,10 +23,7 @@ Imports:
     igraph,
     purrr,
     utils,
-    dplyr,
-    tidyr,
-    magrittr,
-    rlang
+    stats
 Suggests: 
     testthat
 Depends: 

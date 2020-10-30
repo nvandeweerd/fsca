@@ -682,7 +682,7 @@ getUnits <- function(df, colnames = c(TOKEN = "TOKEN",
 #' @param round.to integer for rounding measures
 
 #' @return
-#' a named vector of syntactic complexity measures:
+#' a list of syntactic complexity measures:
 #' - MLS: mean length of sentence
 #' - DIVS: standard deviation of sentence length
 #' - T_S: t-units per sentence
@@ -698,26 +698,21 @@ getUnits <- function(df, colnames = c(TOKEN = "TOKEN",
 #' @examples
 #' data(example)
 #' getMeasures(example, round.to = 2)
-#' @importFrom dplyr bind_rows
-#' @importFrom dplyr mutate
-#' @importFrom dplyr na_if
-#' @importFrom dplyr select
-#' @importFrom magrittr %>%
-#' @importFrom tidyr pivot_longer
-#' @importFrom tidyr pivot_wider
-#' @importFrom rlang .data
+
 #' @export
 
-getMeasures <- function(input, colnames = c(TOKEN = "TOKEN",
-                                            POSITION = "POSITION",
-                                            DEP_ON = "DEP_ON",
-                                            DEP_TYPE = "DEP_TYPE",
-                                            POS = "POS.MELT",
-                                            LEMMA = "LEMMA"), round.to = 2) {
+getMeasures <- function(input, colnames = c(
+                          TOKEN = "TOKEN",
+                          POSITION = "POSITION",
+                          DEP_ON = "DEP_ON",
+                          DEP_TYPE = "DEP_TYPE",
+                          POS = "POS.MELT",
+                          LEMMA = "LEMMA"
+                        ), round.to = 2) {
   if (is.data.frame(input)) {
     input <- list(input)
   }
-  n <- apply(bind_rows(lapply(input, getUnits, colnames = colnames, what = "number")), 2, sum)
+  n <- apply(do.call("rbind", lapply(input, getUnits, colnames = colnames, what = "number")), 2, sum)
 
   len <- lapply(input, getUnits, colnames = colnames, what = "lengths")
   means <- rep(NA, length(n))
@@ -731,41 +726,27 @@ getMeasures <- function(input, colnames = c(TOKEN = "TOKEN",
     sds[i] <- stats::sd(unlist(sapply(len, function(x) (x[[i]])), use.names = FALSE), na.rm = TRUE)
   }
 
-  list <- list(
-    "n" = n,
-    "mean" = means,
-    "sd" = sds
+  df <- data.frame(t(do.call("rbind", list("n" = n, "mean.len" = means, "sd.len" = sds))))
+
+  measures <- list(
+    "MLS" = df["SENTENCES", "mean.len"],
+    "DIVS" = df["SENTENCES", "sd.len"],
+    "T_S" = df["T_UNITS", "n"] / df["SENTENCES", "n"],
+    "MLT" = df["T_UNITS", "mean.len"],
+    "DIVT" = df["T_UNITS", "sd.len"],
+    "C_T" = df["CLAUSES", "n"] / df["T_UNITS", "n"],
+    "MLC" = df["CLAUSES", "mean.len"],
+    "DIVC" = df["CLAUSES", "sd.len"],
+    "MLNP" = df["NOUN_PHRASES", "mean.len"],
+    "DIVNP" = df["NOUN_PHRASES", "sd.len"],
+    "NP_C" = df["NOUN_PHRASES", "n"] / df["CLAUSES", "n"]
   )
 
-  # Measures ####
-  measures <- bind_rows(list, .id = "mes") %>%
-    pivot_longer(!c("mes"), names_to = "unit", values_to = "value") %>%
-    pivot_wider(names_from = c("mes", "unit"), values_from = "value") %>%
-    mutate(
-      T_S = .data$n_T_UNITS / .data$n_SENTENCES,
-      C_T = .data$n_CLAUSES / .data$n_T_UNITS,
-      NP_C = .data$n_NOUN_PHRASES / .data$n_CLAUSES
-    ) %>%
-    mutate(NP_C = na_if(.data$NP_C, Inf)) %>%
-    select(
-      MLS = .data$mean_SENTENCES,
-      DIVS = .data$sd_SENTENCES,
-      .data$T_S,
-      MLT = .data$mean_T_UNITS,
-      DIVT = .data$sd_T_UNITS,
-      .data$C_T,
-      MLC = .data$mean_CLAUSES,
-      DIVC = .data$sd_CLAUSES,
-      MLNP = .data$mean_NOUN_PHRASES,
-      DIVNP = .data$sd_NOUN_PHRASES,
-      .data$NP_C
-    ) %>%
-    unlist()
-
-  measures <- sapply(measures, round, round.to)
+  measures <- lapply(measures, round, round.to)
 
   return(measures)
 }
+
 
 
 
