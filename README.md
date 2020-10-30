@@ -7,7 +7,7 @@ This document provides an overview of the `fsca` package.
 
 Please cite the following when using this package:
 
-Vandeweerd, N. (in press). *fsca: French syntactic complexity analyser*
+Vandeweerd, N. (in press). *fsca: French syntactic complexity analyzer.*
 International Journal of Learner Corpus Research.
 
 # Installation
