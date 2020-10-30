@@ -2,4 +2,3 @@
 
 export(getMeasures)
 export(getUnits)
-export(synt.units.fcn)

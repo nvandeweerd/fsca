@@ -280,35 +280,6 @@ splitat.fcn <- function(x, pos) unname(split(x, cumsum(seq_along(x) %in% pos)))
 
 # Main functions ####
 
-#' Generate a List of Syntactic Units
-#'
-#' This function returns a list of syntactic units (sentences, t-units, clauses
-#' dependent clauses, coordinated clauses, verb phrases and noun phrases) from
-#' a dependency parsed sentence in CONLL format.
-#' @usage
-#' synt.units.fcn(df, colnames = c(TOKEN = "TOKEN", POSITION = "POSITION",
-#' DEP_ON = "DEP_ON", DEP_TYPE = "DEP_TYPE", POS = "POS.MELT", LEMMA = "LEMMA"))
-#'
-#' @param df A data frame which contains a sentence in CONLL format
-#' @param colnames A named vector containing the names of the following columns:
-#'
-#' - TOKEN: name of the column with the tokens
-#' - POSITION: name of column with the word index
-#' - DEP_ON: name of column with the dependency heads
-#' - DEP_TYPE: name of column with the dependency relations
-#' - POS: name of column with the part of speech tags
-#' - LEMMA: name of column with the lemmas
-
-#' @return The output is a list containing, for each  syntactic
-#' unit:
-#'
-#' - the NUMBER identified units (integer)
-#' - the LENGTHS of units (integer vector)
-#' - the TOKENS belonging to each unit (list of character vectors)
-#'
-#' @example R/examples/example01.R
-#' @export
-
 synt.units.fcn <- function(df,
                            colnames = c(TOKEN = "TOKEN",
                                 POSITION = "POSITION",
@@ -584,9 +555,8 @@ synt.units.fcn <- function(df,
   return(synt.units)
 }
 
-#' Extract elements from the list of all syntactc units
+#' Extract elements from the list of all syntactic units
 #'
-#' This function is a wrapper function for `synt.units.fcn`
 #' @usage
 #' getUnits(df, colnames = c(TOKEN = "TOKEN", POSITION = "POSITION", DEP_ON =
 #'  "DEP_ON", DEP_TYPE = "DEP_TYPE", POS = "POS.MELT", LEMMA = "LEMMA"),
@@ -616,8 +586,8 @@ synt.units.fcn <- function(df,
 #' together
 
 #' @return
-#' If `what` is "all" (the default) then the full output of `synt.units.fcn`
-#' will be returned as a list.
+#' If `what` is "all" (the default) then the full output of
+#' will be returned as a list containing the number, lengths and tokens of each unit.
 #'
 #' If `what` is "number" then the number of identified units will be returned as
 #' a named vector.
@@ -628,7 +598,7 @@ synt.units.fcn <- function(df,
 #' If `what` is "tokens" then the tokens belonging to each unit will be returned
 #' as a list of character vectors.
 
-#' @example R/examples/example02.R
+#' @example R/examples/example.R
 #'
 #' @export
 
@@ -709,25 +679,30 @@ getMeasures <- function(input, colnames = c(
                           POS = "POS.MELT",
                           LEMMA = "LEMMA"
                         ), round.to = 2) {
+  #if input is a vector, make a list
   if (is.data.frame(input)) {
     input <- list(input)
   }
+  #get counts of each unit
   n <- apply(do.call("rbind", lapply(input, getUnits, colnames = colnames, what = "number")), 2, sum)
-
+  #get the lengths of each unit
   len <- lapply(input, getUnits, colnames = colnames, what = "lengths")
+  #for each unit calculate the mean length
   means <- rep(NA, length(n))
   names(means) <- names(n)
   for (i in seq(length(n))) {
     means[i] <- mean(unlist(sapply(len, function(x) (x[[i]])), use.names = FALSE), na.rm = TRUE)
   }
+  #for each uit calculate the sd of length
   sds <- rep(NA, length(n))
   names(sds) <- names(n)
   for (i in seq(length(n))) {
     sds[i] <- stats::sd(unlist(sapply(len, function(x) (x[[i]])), use.names = FALSE), na.rm = TRUE)
   }
-
+  #combine counts, mean lengths and sd lengths together
   df <- data.frame(t(do.call("rbind", list("n" = n, "mean.len" = means, "sd.len" = sds))))
 
+  #make a list of the measures
   measures <- list(
     "MLS" = df["SENTENCES", "mean.len"],
     "DIVS" = df["SENTENCES", "sd.len"],
@@ -742,6 +717,7 @@ getMeasures <- function(input, colnames = c(
     "NP_C" = df["NOUN_PHRASES", "n"] / df["CLAUSES", "n"]
   )
 
+  #round the measures to the desired decimal point
   measures <- lapply(measures, round, round.to)
 
   return(measures)

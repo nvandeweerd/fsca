@@ -17,7 +17,7 @@ getUnits(example, what = "tokens")
 #get tokens of a specific unit only
 getUnits(example, what = "tokens", unit = c("NOUN_PHRASES"))
 
-#get tokens of a specific unit only and paste them together
+#get tokens of a specific unit only and pastes them together
 getUnits(example, what = "tokens", unit = c("NOUN_PHRASES"), paste.tokens = TRUE)
 
 

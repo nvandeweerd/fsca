@@ -1,5 +1,5 @@
-Package: synt.units.fcn
-Title: An R function to extract syntactic units from L2 French texts
+Package: fsca
+Title: French syntactic complexity analyser 
 Version: 0.0.0.9000
 Date: Sys.Date()
 Authors@R: 
@@ -8,12 +8,11 @@ Authors@R:
            role = c("aut", "cre"),
            email = "nathan.vandeweerd@uclouvain.be",
            comment = c(ORCID = "0000-0002-6498-9474"))
-Description: This packages extracts a list of syntactic units from a dependency
-  parsed French sentence in CONLL format. The units include: sentences, t-units,
-  clauses, dependent clauses, coordinated clauses, 
-  verb phrases and noun phrases.
-URL: https://github.com/nvandeweerd/synt.units.fcn 
-BugReports: https://github.com/nvandeweerd/synt.units.fcn/issues
+Description: This package extracts a list of syntactic units from a dependency
+  parsed French sentence in CONLL format and calculates a variety of syntactic complexity
+  measures.
+URL: https://github.com/nvandeweerd/fsca
+BugReports: https://github.com/nvandeweerd/fsca/issues
 License: MIT + file LICENSE
 Encoding: UTF-8
 LazyData: true

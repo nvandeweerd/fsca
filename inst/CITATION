@@ -2,11 +2,9 @@ year <- sub("-.*", "", meta$Date)
 note <- sprintf("R package version %s", meta$Version)
 
 bibentry(bibtype = "Article",
-         title = "synt.units.fcn: An R function to extract syntactic units from L2 French texts",
-         textVersion = "Vandeweerd N (in press). synt.units.fcn: An R function to extract
-syntactic units from L2 French texts. International Journal of
-Learner Corpus Research.",
+         title = "fsca: French syntactic complexity analyzer",
+         textVersion = "Vandeweerd N (in press). fsca: French syntactic complexity analyzer. International Journal of Learner Corpus Research.",
          journal = "International Journal of Learner Corpus Research",
          author = c(person("Nathan", "Vandeweerd")),
          year = "in press",
-         url = "https://github.com/nvandeweerd/synt.units.fcn")
+         url = "https://github.com/nvandeweerd/fsca")
