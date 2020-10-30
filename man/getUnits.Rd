@@ -25,7 +25,7 @@ getUnits(df, colnames = c(TOKEN = "TOKEN", POSITION = "POSITION", DEP_ON =
 \item{what}{one of the following character strings:
 \itemize{
 \item "number": returns the number identified units (integer)
-\item lengths": returns the lengths of units (integer vector)
+\item "lengths": returns the lengths of units (integer vector)
 \item "tokens": returns the tokens belonging to each unit (list of character vectors)
 }}
 

@@ -1,6 +1,7 @@
 Package: synt.units.fcn
-Title: Extracts Syntactic Units
+Title: An R function to extract syntactic units from L2 French texts
 Version: 0.0.0.9000
+Date: Sys.Date()
 Authors@R: 
     person(given = "Nathan",
            family = "Vandeweerd",
@@ -11,6 +12,7 @@ Description: This packages extracts a list of syntactic units from a dependency
   parsed French sentence in CONLL format. The units include: sentences, t-units,
   clauses, dependent clauses, coordinated clauses, 
   verb phrases and noun phrases.
+URL: https://github.com/nvandeweerd/synt.units.fcn 
 BugReports: https://github.com/nvandeweerd/synt.units.fcn/issues
 License: MIT + file LICENSE
 Encoding: UTF-8
@@ -20,7 +22,11 @@ RoxygenNote: 6.1.1
 Imports: 
     igraph,
     purrr,
-    utils
+    utils,
+    dplyr,
+    tidyr,
+    magrittr,
+    rlang
 Suggests: 
     testthat
 Depends: 

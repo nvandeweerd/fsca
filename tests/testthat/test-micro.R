@@ -9,6 +9,11 @@ test_that("Coordinated clauses", {
   expect_equal(df[["CO_CLAUSES"]][["LENGTHS"]], c(21, 9))
 })
 
+test_that("T-Units", {
+  expect_equal(df[["T_UNITS"]][["NUMBER"]], 2)
+  expect_equal(df[["T_UNITS"]][["LENGTHS"]], c(21, 9))
+})
+
 df <- synt.units.fcn(test.sents[["b.4.1"]])
 
 test_that("Dependent clauses", {

@@ -603,7 +603,7 @@ synt.units.fcn <- function(df,
 #' - LEMMA: name of column with the lemmas
 #' @param what one of the following character strings:
 #' - "number": returns the number identified units (integer)
-#' - lengths": returns the lengths of units (integer vector)
+#' - "lengths": returns the lengths of units (integer vector)
 #' - "tokens": returns the tokens belonging to each unit (list of character vectors)
 #' @param units a vector containing the units to be extracted:
 #' - "SENTENCES": returns sentences
@@ -663,6 +663,111 @@ getUnits <- function(df, colnames = c(TOKEN = "TOKEN",
       }}
     return(x)
 }
+
+#' Calculate syntactic measures
+#'
+#' @usage
+#' getMeasures(input, colnames = c(TOKEN = "TOKEN", POSITION = "POSITION", DEP_ON =
+#'  "DEP_ON", DEP_TYPE = "DEP_TYPE", POS = "POS.MELT", LEMMA = "LEMMA"), round.to = 2)
+#'
+#' @param input a data frame which contains a sentence in CONLL format or a list
+#' of data frames in CONLL format (see \code{\link{getUnits}})
+#' @param colnames a named vector containing the names of the following columns:
+#' - TOKEN: name of the column with the tokens
+#' - POSITION: name of column with the word index
+#' - DEP_ON: name of column with the dependency heads
+#' - DEP_TYPE: name of column with the dependency relations
+#' - POS: name of column with the part of speech tags
+#' - LEMMA: name of column with the lemmas
+#' @param round.to integer for rounding measures
+
+#' @return
+#' a named vector of syntactic complexity measures:
+#' - MLS: mean length of sentence
+#' - DIVS: standard deviation of sentence length
+#' - T_S: t-units per sentence
+#' - MLT: mean length of t-unit
+#' - DIVT: standard deviation of t-unit length
+#' - C_T: clauses per sentence
+#' - MLC: mean length of clause
+#' - DIVC: standard deviation of clause length
+#' - MLNP: mean length of noun phrases
+#' - DIVNP: standard deviation of noun phrase length
+#' - NP_C: noun prases per clause
+
+#' @examples
+#' data(example)
+#' getMeasures(example, round.to = 2)
+#' @importFrom dplyr bind_rows
+#' @importFrom dplyr mutate
+#' @importFrom dplyr na_if
+#' @importFrom dplyr select
+#' @importFrom magrittr %>%
+#' @importFrom tidyr pivot_longer
+#' @importFrom tidyr pivot_wider
+#' @importFrom rlang .data
+#' @export
+
+getMeasures <- function(input, colnames = c(TOKEN = "TOKEN",
+                                            POSITION = "POSITION",
+                                            DEP_ON = "DEP_ON",
+                                            DEP_TYPE = "DEP_TYPE",
+                                            POS = "POS.MELT",
+                                            LEMMA = "LEMMA"), round.to = 2) {
+  if (is.data.frame(input)) {
+    input <- list(input)
+  }
+  n <- apply(bind_rows(lapply(input, getUnits, colnames = colnames, what = "number")), 2, sum)
+
+  len <- lapply(input, getUnits, colnames = colnames, what = "lengths")
+  means <- rep(NA, length(n))
+  names(means) <- names(n)
+  for (i in seq(length(n))) {
+    means[i] <- mean(unlist(sapply(len, function(x) (x[[i]])), use.names = FALSE), na.rm = TRUE)
+  }
+  sds <- rep(NA, length(n))
+  names(sds) <- names(n)
+  for (i in seq(length(n))) {
+    sds[i] <- stats::sd(unlist(sapply(len, function(x) (x[[i]])), use.names = FALSE), na.rm = TRUE)
+  }
+
+  list <- list(
+    "n" = n,
+    "mean" = means,
+    "sd" = sds
+  )
+
+  # Measures ####
+  measures <- bind_rows(list, .id = "mes") %>%
+    pivot_longer(!c("mes"), names_to = "unit", values_to = "value") %>%
+    pivot_wider(names_from = c("mes", "unit"), values_from = "value") %>%
+    mutate(
+      T_S = .data$n_T_UNITS / .data$n_SENTENCES,
+      C_T = .data$n_CLAUSES / .data$n_T_UNITS,
+      NP_C = .data$n_NOUN_PHRASES / .data$n_CLAUSES
+    ) %>%
+    mutate(NP_C = na_if(.data$NP_C, Inf)) %>%
+    select(
+      MLS = .data$mean_SENTENCES,
+      DIVS = .data$sd_SENTENCES,
+      .data$T_S,
+      MLT = .data$mean_T_UNITS,
+      DIVT = .data$sd_T_UNITS,
+      .data$C_T,
+      MLC = .data$mean_CLAUSES,
+      DIVC = .data$sd_CLAUSES,
+      MLNP = .data$mean_NOUN_PHRASES,
+      DIVNP = .data$sd_NOUN_PHRASES,
+      .data$NP_C
+    ) %>%
+    unlist()
+
+  measures <- sapply(measures, round, round.to)
+
+  return(measures)
+}
+
+
 
 
 
