@@ -1,8 +1,9 @@
-#' Example sentence in CONLL format
+#' Example sentences in CONLL format
 #'
-#' An example sentence in CONLL format
+#' An list of example sentences in CONLL format
+#' @usage data(test.sents)
 #'
-#' @format A data frame with 13 rows and 9 variables:
+#' @format A list containing 11 data frames. Each data frame has the following columns:
 #' \describe{
 #'   \item{SENTID}{sentence id}
 #'   \item{TOKEN}{token}
@@ -15,4 +16,4 @@
 #'   \item{DEP_ON}{head of dependency}
 #' }
 
-"example"
+"test.sents"
