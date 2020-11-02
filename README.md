@@ -7,6 +7,9 @@ texts as part of a research project focusing on phraseological
 complexity in learner language. For more details see Vandeweerd, Housen
 and Paquot (in press).
 
+Also see how to run a complete analysis in [this
+vignette](https://github.com/nvandeweerd/fsca/blob/main/inst/doc/example-analysis.md).
+
 # Licence
 
 This package is distributed with an MIT license, which means that anyone
@@ -28,14 +31,16 @@ library(fsca)
 
 # Overview
 
-The package contains two functions:
+The package contains three functions:
 
-  - `getUnits()`: a function to extract syntactic units  
+  - `getParse()`: a function to prepare dependency parsed texts for
+    analysis
+  - `getUnits()`: a function to extract syntactic units from dependency
+    parsed texts
   - `getMeasures()`: a function to calculate measures of syntactic
-    complexity
+    complexity from dependency parsed texts
 
-For help with using the functions, call `?getUnits()` or
-`?getMeasures()`.
+To see the documentation for each function, call `help()`.
 
 The package also contains a data file (`test.sents`) with the example
 sentences found below. This can be loaded using `data()`.
