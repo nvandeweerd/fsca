@@ -1,5 +1,0 @@
-La syntaxe est, à l'origine, la branche de la linguistique qui étudie la façon dont les mots se combinent pour former des phrases ou des énoncés dans une langue.
-
-On distingue la syntaxe, qui concerne les expressions [les mots], de la sémantique, qui concerne ce qui est visé par les expressions [le sens, la signification/les choses].
-
-Le terme de syntaxe est aussi utilisé en informatique, où sa définition est similaire, modulo une terminologie différente. Ainsi, la syntaxe est le respect, ou le non-respect, de la grammaire formelle d'un langage, c'est-à-dire des règles d'agencement des lexèmes (en informatique, ce sont des entités lexicales d'un langage informatique) en des termes plus complexes, souvent des programmes. Dans la théorie des langages formels, ce qui joue le rôle de lexème est en général appelé lettre ou symbole, et les termes produits sont appelés mots.
