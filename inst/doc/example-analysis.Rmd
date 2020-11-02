@@ -1,12 +1,8 @@
 ---
 title: "Example analysis using the `fsca` package"
-output: rmarkdown::html_vignette
+output: github_document
 bibliography: "PhD.bib"
 csl: "apa-6th-edition.csl"
-vignette: >
-  %\VignetteIndexEntry{example-analysis}
-  %\VignetteEncoding{UTF-8}
-  %\VignetteEngine{knitr::rmarkdown}
 editor_options: 
   chunk_output_type: console
 ---
