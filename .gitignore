@@ -7,5 +7,4 @@ apa-6th-edition.csl
 citations.bib
 README.Rmd
 .Rbuildignore
-inst/doc
 .bib

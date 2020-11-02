@@ -2,7 +2,7 @@
 % Please edit documentation in R/fsca.R
 \name{getParse}
 \alias{getParse}
-\title{Prepare output of Malt Parser}
+\title{Extract data frames from output of Malt Parser}
 \usage{
 getParse(file)
 }
@@ -13,5 +13,5 @@ getParse(file)
 A list of data frames which can be analyzed using \code{getUnits()} or \code{getMeasures()}.
 }
 \description{
-Prepare output of Malt Parser
+Extract data frames from output of Malt Parser
 }
