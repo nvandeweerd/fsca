@@ -1,0 +1,680 @@
+% Options for packages loaded elsewhere
+\PassOptionsToPackage{unicode}{hyperref}
+\PassOptionsToPackage{hyphens}{url}
+%
+\documentclass[
+]{article}
+\usepackage{lmodern}
+\usepackage{amssymb,amsmath}
+\usepackage{ifxetex,ifluatex}
+\ifnum 0\ifxetex 1\fi\ifluatex 1\fi=0 % if pdftex
+  \usepackage[T1]{fontenc}
+  \usepackage[utf8]{inputenc}
+  \usepackage{textcomp} % provide euro and other symbols
+\else % if luatex or xetex
+  \usepackage{unicode-math}
+  \defaultfontfeatures{Scale=MatchLowercase}
+  \defaultfontfeatures[\rmfamily]{Ligatures=TeX,Scale=1}
+\fi
+% Use upquote if available, for straight quotes in verbatim environments
+\IfFileExists{upquote.sty}{\usepackage{upquote}}{}
+\IfFileExists{microtype.sty}{% use microtype if available
+  \usepackage[]{microtype}
+  \UseMicrotypeSet[protrusion]{basicmath} % disable protrusion for tt fonts
+}{}
+\makeatletter
+\@ifundefined{KOMAClassName}{% if non-KOMA class
+  \IfFileExists{parskip.sty}{%
+    \usepackage{parskip}
+  }{% else
+    \setlength{\parindent}{0pt}
+    \setlength{\parskip}{6pt plus 2pt minus 1pt}}
+}{% if KOMA class
+  \KOMAoptions{parskip=half}}
+\makeatother
+\usepackage{xcolor}
+\IfFileExists{xurl.sty}{\usepackage{xurl}}{} % add URL line breaks if available
+\IfFileExists{bookmark.sty}{\usepackage{bookmark}}{\usepackage{hyperref}}
+\hypersetup{
+  pdftitle={README},
+  hidelinks,
+  pdfcreator={LaTeX via pandoc}}
+\urlstyle{same} % disable monospaced font for URLs
+\usepackage[margin=1in]{geometry}
+\usepackage{color}
+\usepackage{fancyvrb}
+\newcommand{\VerbBar}{|}
+\newcommand{\VERB}{\Verb[commandchars=\\\{\}]}
+\DefineVerbatimEnvironment{Highlighting}{Verbatim}{commandchars=\\\{\}}
+% Add ',fontsize=\small' for more characters per line
+\usepackage{framed}
+\definecolor{shadecolor}{RGB}{248,248,248}
+\newenvironment{Shaded}{\begin{snugshade}}{\end{snugshade}}
+\newcommand{\AlertTok}[1]{\textcolor[rgb]{0.94,0.16,0.16}{#1}}
+\newcommand{\AnnotationTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textbf{\textit{#1}}}}
+\newcommand{\AttributeTok}[1]{\textcolor[rgb]{0.77,0.63,0.00}{#1}}
+\newcommand{\BaseNTok}[1]{\textcolor[rgb]{0.00,0.00,0.81}{#1}}
+\newcommand{\BuiltInTok}[1]{#1}
+\newcommand{\CharTok}[1]{\textcolor[rgb]{0.31,0.60,0.02}{#1}}
+\newcommand{\CommentTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textit{#1}}}
+\newcommand{\CommentVarTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textbf{\textit{#1}}}}
+\newcommand{\ConstantTok}[1]{\textcolor[rgb]{0.00,0.00,0.00}{#1}}
+\newcommand{\ControlFlowTok}[1]{\textcolor[rgb]{0.13,0.29,0.53}{\textbf{#1}}}
+\newcommand{\DataTypeTok}[1]{\textcolor[rgb]{0.13,0.29,0.53}{#1}}
+\newcommand{\DecValTok}[1]{\textcolor[rgb]{0.00,0.00,0.81}{#1}}
+\newcommand{\DocumentationTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textbf{\textit{#1}}}}
+\newcommand{\ErrorTok}[1]{\textcolor[rgb]{0.64,0.00,0.00}{\textbf{#1}}}
+\newcommand{\ExtensionTok}[1]{#1}
+\newcommand{\FloatTok}[1]{\textcolor[rgb]{0.00,0.00,0.81}{#1}}
+\newcommand{\FunctionTok}[1]{\textcolor[rgb]{0.00,0.00,0.00}{#1}}
+\newcommand{\ImportTok}[1]{#1}
+\newcommand{\InformationTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textbf{\textit{#1}}}}
+\newcommand{\KeywordTok}[1]{\textcolor[rgb]{0.13,0.29,0.53}{\textbf{#1}}}
+\newcommand{\NormalTok}[1]{#1}
+\newcommand{\OperatorTok}[1]{\textcolor[rgb]{0.81,0.36,0.00}{\textbf{#1}}}
+\newcommand{\OtherTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{#1}}
+\newcommand{\PreprocessorTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textit{#1}}}
+\newcommand{\RegionMarkerTok}[1]{#1}
+\newcommand{\SpecialCharTok}[1]{\textcolor[rgb]{0.00,0.00,0.00}{#1}}
+\newcommand{\SpecialStringTok}[1]{\textcolor[rgb]{0.31,0.60,0.02}{#1}}
+\newcommand{\StringTok}[1]{\textcolor[rgb]{0.31,0.60,0.02}{#1}}
+\newcommand{\VariableTok}[1]{\textcolor[rgb]{0.00,0.00,0.00}{#1}}
+\newcommand{\VerbatimStringTok}[1]{\textcolor[rgb]{0.31,0.60,0.02}{#1}}
+\newcommand{\WarningTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textbf{\textit{#1}}}}
+\usepackage{graphicx,grffile}
+\makeatletter
+\def\maxwidth{\ifdim\Gin@nat@width>\linewidth\linewidth\else\Gin@nat@width\fi}
+\def\maxheight{\ifdim\Gin@nat@height>\textheight\textheight\else\Gin@nat@height\fi}
+\makeatother
+% Scale images if necessary, so that they will not overflow the page
+% margins by default, and it is still possible to overwrite the defaults
+% using explicit options in \includegraphics[width, height, ...]{}
+\setkeys{Gin}{width=\maxwidth,height=\maxheight,keepaspectratio}
+% Set default figure placement to htbp
+\makeatletter
+\def\fps@figure{htbp}
+\makeatother
+\setlength{\emergencystretch}{3em} % prevent overfull lines
+\providecommand{\tightlist}{%
+  \setlength{\itemsep}{0pt}\setlength{\parskip}{0pt}}
+\setcounter{secnumdepth}{-\maxdimen} % remove section numbering
+
+\title{README}
+\author{}
+\date{\vspace{-2.5em}}
+
+\begin{document}
+\maketitle
+
+This document provides an overview of the \texttt{fsca} package. This
+package was developed to calculate measures of syntactic complexity in
+L2 French texts as part of a research project focusing on phraseological
+complexity in learner language. For more details see Vandeweerd, Housen
+and Paquot (in press).
+
+Also see how to run a complete analysis in
+\href{https://github.com/nvandeweerd/fsca/blob/main/inst/doc/example-analysis.md}{this
+vignette}.
+
+\hypertarget{licence}{%
+\section{Licence}\label{licence}}
+
+This package is distributed with an MIT license, which means that anyone
+is free to use or modify the contents. In such cases, please the
+following citation:
+
+\begin{quote}
+Vandeweerd, N. (in press). \emph{fsca: French syntactic complexity
+analyzer.} International Journal of Learner Corpus Research.
+\end{quote}
+
+\hypertarget{installation}{%
+\section{Installation}\label{installation}}
+
+The \texttt{fsca} package can be installed from the github repository:
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\KeywordTok{install.packages}\NormalTok{(}\StringTok{"devtools"}\NormalTok{)}
+\NormalTok{devtools}\OperatorTok{::}\KeywordTok{install_github}\NormalTok{(}\StringTok{"nvandeweerd/fsca"}\NormalTok{)}
+\KeywordTok{library}\NormalTok{(fsca)}
+\end{Highlighting}
+\end{Shaded}
+
+\hypertarget{overview}{%
+\section{Overview}\label{overview}}
+
+The package contains three functions:
+
+\begin{itemize}
+\tightlist
+\item
+  \texttt{getParse()}: a function to prepare dependency parsed texts for
+  analysis
+\item
+  \texttt{getUnits()}: a function to extract syntactic units from
+  dependency parsed texts
+\item
+  \texttt{getMeasures()}: a function to calculate measures of syntactic
+  complexity from dependency parsed texts
+\end{itemize}
+
+To see the documentation for each function, call \texttt{help()}.
+
+The package also contains a data file (\texttt{test.sents}) with the
+example sentences found below. This can be loaded using \texttt{data()}.
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\KeywordTok{data}\NormalTok{(test.sents)}
+\end{Highlighting}
+\end{Shaded}
+
+\hypertarget{preprocessing}{%
+\section{Preprocessing}\label{preprocessing}}
+
+The input of both \texttt{getUnits()} and \texttt{getMeasures()} is a
+dependency parsed sentence in CONLL format. This function was written to
+extract syntactic units from a corpus of L2 French texts in order to
+calculate measures of syntactic complexity (see Vandeweerd, Housen, \&
+Paquot, n.d.). The texts were POS-tagged with MElt Tagger (Denis \&
+Sagot, 2012) and dependency parsed with Malt Parser (Nivre, Hall, \&
+Nilsson, 2006).\footnote{On the basis of the dependency tags generated
+  by Malt Parser, five new dependency labels were created for the
+  purpose of calculating phraseological complexity measures: dobj:
+  objects of verbs with the POS tag ``NC''; amod : noun modifiers with
+  the POS tag ``ADJ''; advmod\_ADJ: modifiers of adjectives with the POS
+  tag ``ADV''; advmod\_ADV: modifiers of adverbs with the POS tag
+  ``ADV''; advmod\_VER: modifiers of verbs with the POS tag ``ADV''}
+
+An example of a sentence in CONLL format is provided below:
+
+\begin{verbatim}
+[1] "C'est un point très important."
+\end{verbatim}
+
+\begin{verbatim}
+##       TOKEN   POS.TT     LEMMA POS.MELT POSITION   DEP_TYPE DEP_ON
+## 1        C'  PRO:DEM        ce      CLS        1        suj      2
+## 2       est VER:pres      être        V        2       root      0
+## 3        un  DET:ART        un      DET        3        det      4
+## 4     point      NOM     point       NC        4        ats      2
+## 5      très      ADV      très      ADV        5 advmod_ADJ      6
+## 6 important      ADJ important      ADJ        6       amod      4
+## 7         .     SENT         .    PONCT        7      ponct      2
+\end{verbatim}
+
+In this case, the main verb of the sentence is \emph{est}
+(`is-3SG.PRES') and is labeled as the `root'. As the top level node of a
+sentence, it is not dependent on any other word, hence the value of 0 in
+the DEP\_ON column. Because \emph{est} is the second word of the
+sentence, the position is 2 (indicated in the POSITION column). All
+words which are directly dependent on \emph{est} have the value of 2 in
+the DEP\_ON column. This includes the subject \emph{C'} (`it') as well
+as the subject attribute \emph{point} (`point'). The sentence-final
+period is also dependent on the root. The words which are directly
+dependent on \emph{point} include the determiner \emph{un} (`a') and the
+adjective \emph{important} (`important'), which is itself modified by
+the adverb \emph{très} (`very'). In this way, every word in the sentence
+is dependent on one and only one word.\footnote{For an overview of
+  dependency parsing see Green (2011).}
+
+\hypertarget{syntactic-structures}{%
+\section{Syntactic structures}\label{syntactic-structures}}
+
+The \texttt{getUnits()} function first searches for a list of node words
+for a given unit (e.g.~nouns for noun phrases) and then extracts all of
+the dependencies on each of the node words using the using the
+\texttt{induced.subgraph()} function from the \texttt{igraph} package
+(Csardi \& Nepusz, 2006). The definitions used for each unit are
+provided below along with examples extracted from the corpus. Each
+example provides the original sentence followed by the units which were
+extracted. They have been simplified for readability by pasting the
+tokens together.
+
+\hypertarget{sentences}{%
+\subsection{Sentences}\label{sentences}}
+
+Following Lu (2010: 481) we defined a sentence as ``a group of words
+delimited by one of the following punctuation marks that signal the end
+of a sentence: period, question mark, exclamation mark, quotation mark
+or ellipsis''. Because the CONLL input to the \texttt{getUnits()}
+function is already segmented into sentences, no additional query is
+required.
+
+\hypertarget{clauses}{%
+\subsection{Clauses}\label{clauses}}
+
+Clauses are defined as structures with a subject and a finite verb
+(Hunt, 1965). After identifying dependent clauses and T-units, clauses
+include all T-units as well as all subordinate clauses emedded within
+the T-units in a given sentence.
+
+\hypertarget{dep-clauses}{%
+\subsection{Dependent clauses}\label{dep-clauses}}
+
+Dependent clauses are clauses which are semantically and/or structurally
+dependent on a super-ordinate syntactic structure. They include nominal
+clauses, adverbial clauses and adjectival clauses (Hunt, 1965; Lu,
+2010). They must contain a finite verb and a subject.
+
+\hypertarget{nomclause}{%
+\subsubsection{Nominal clauses}\label{nomclause}}
+
+Nominal clauses are extracted using subordinate conjunctions
+(e.g.~\emph{que}, `which') as the main node.
+
+\begin{verbatim}
+[1] "Ils prétendent qu'il est impossible de rééduquer un tel jeune criminel."
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\KeywordTok{getUnits}\NormalTok{(test.sents[[}\StringTok{"b.208.1"}\NormalTok{]], }
+         \DataTypeTok{what =} \StringTok{"tokens"}\NormalTok{, }
+         \DataTypeTok{units =} \KeywordTok{c}\NormalTok{(}\StringTok{"DEP_CLAUSES"}\NormalTok{), }
+         \DataTypeTok{paste.tokens =} \OtherTok{TRUE}\NormalTok{)}
+\CommentTok{## $DEP_CLAUSES}
+\CommentTok{## $DEP_CLAUSES[[1]]}
+\CommentTok{## [1] "qu' il est impossible de rééduquer un tel jeune criminel"}
+\end{Highlighting}
+\end{Shaded}
+
+\hypertarget{advclause}{%
+\subsubsection{Adverbial clauses}\label{advclause}}
+
+Adverbial clauses are also extracted using subordinate conjunctions as
+the main node.
+
+\begin{verbatim}
+[1] "Quand les lois sont contre le droit, il n'y a qu'une héroïque façon de protester contre elles : les violer (Hugo)."
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\KeywordTok{getUnits}\NormalTok{(test.sents[[}\StringTok{"b.347.1"}\NormalTok{]], }
+         \DataTypeTok{what =} \StringTok{"tokens"}\NormalTok{, }
+         \DataTypeTok{units =} \KeywordTok{c}\NormalTok{(}\StringTok{"DEP_CLAUSES"}\NormalTok{), }
+         \DataTypeTok{paste.tokens =} \OtherTok{TRUE}\NormalTok{)}
+\CommentTok{## $DEP_CLAUSES}
+\CommentTok{## $DEP_CLAUSES[[1]]}
+\CommentTok{## [1] "Quand les lois sont contre le droit"}
+\end{Highlighting}
+\end{Shaded}
+
+\hypertarget{adjclause}{%
+\subsubsection{Adjectival clauses}\label{adjclause}}
+
+Adjectival clauses are extracted using pronouns and finite verbs that
+modify a noun as the main nodes (e.g.~\emph{durent} and \emph{arrivent}
+in the example below).
+
+\begin{verbatim}
+[1] "Des procès qui durent des années, des déclarations d'impôts inhumainement longues et compliquées, un gouvernement qui n'arrive pas à prendre forme..."
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\KeywordTok{getUnits}\NormalTok{(test.sents[[}\StringTok{"b.110.1"}\NormalTok{]], }
+         \DataTypeTok{what =} \StringTok{"tokens"}\NormalTok{, }
+         \DataTypeTok{units =} \KeywordTok{c}\NormalTok{(}\StringTok{"DEP_CLAUSES"}\NormalTok{), }
+         \DataTypeTok{paste.tokens =} \OtherTok{TRUE}\NormalTok{)}
+\CommentTok{## $DEP_CLAUSES}
+\CommentTok{## $DEP_CLAUSES[[1]]}
+\CommentTok{## [1] "qui durent des années"}
+\CommentTok{## }
+\CommentTok{## $DEP_CLAUSES[[2]]}
+\CommentTok{## [1] "qui n' arrive pas à prendre forme"}
+\end{Highlighting}
+\end{Shaded}
+
+\hypertarget{special-cases}{%
+\subsubsection{Special cases}\label{special-cases}}
+
+Clauses of the type `il y a' are considered dependent clauses only if
+\emph{a} is directly dependent on a finite verb or if there is a finite
+verb dependent on \emph{a}. This means that adverbial clauses which
+function like `ago' in English (e.g.~\emph{il y a deux ans\ldots{}};
+`two years ago\ldots{}') are captured as dependent clauses but simple
+declaratives (e.g.~\emph{il y a une maison}; `there is a house') are
+not.
+
+\begin{verbatim}
+[1] "Il y a quelques siècles, les empereurs pourraient modifier les règles selon leur volonté."
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\KeywordTok{getUnits}\NormalTok{(test.sents[[}\StringTok{"a.65.1"}\NormalTok{]], }
+         \DataTypeTok{what =} \StringTok{"tokens"}\NormalTok{, }
+         \DataTypeTok{units =} \KeywordTok{c}\NormalTok{(}\StringTok{"DEP_CLAUSES"}\NormalTok{), }
+         \DataTypeTok{paste.tokens =} \OtherTok{TRUE}\NormalTok{)}
+\CommentTok{## $DEP_CLAUSES}
+\CommentTok{## $DEP_CLAUSES[[1]]}
+\CommentTok{## [1] "Il y a quelques siècles"}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+[1] "Ensuite, il y a des délits dus aux problèmes personnels survenus à la maison ou à l'école."
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\KeywordTok{getUnits}\NormalTok{(test.sents[[}\StringTok{"a.57.1"}\NormalTok{]], }
+         \DataTypeTok{what =} \StringTok{"tokens"}\NormalTok{, }
+         \DataTypeTok{units =} \KeywordTok{c}\NormalTok{(}\StringTok{"DEP_CLAUSES"}\NormalTok{), }
+         \DataTypeTok{paste.tokens =} \OtherTok{TRUE}\NormalTok{)}
+\CommentTok{## $DEP_CLAUSES}
+\CommentTok{## $DEP_CLAUSES[[1]]}
+\CommentTok{## [1] "NA"}
+\end{Highlighting}
+\end{Shaded}
+
+Direct interrogatives in the form \emph{est-ce que} are not considered
+the head of subordinate clauses. Rather, the head of a clause is the
+finite verb dominated by \emph{est} as in interrogatives formed by
+inversion.
+
+\begin{verbatim}
+[1] "Est-ce que les règles sont nécessaires?"
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\KeywordTok{getUnits}\NormalTok{(test.sents[[}\StringTok{"a.17.1"}\NormalTok{]], }
+         \DataTypeTok{what =} \StringTok{"tokens"}\NormalTok{, }
+         \DataTypeTok{units =} \KeywordTok{c}\NormalTok{(}\StringTok{"CLAUSES"}\NormalTok{, }\StringTok{"DEP_CLAUSES"}\NormalTok{), }
+         \DataTypeTok{paste.tokens =} \OtherTok{TRUE}\NormalTok{)}
+\CommentTok{## $CLAUSES}
+\CommentTok{## $CLAUSES[[1]]}
+\CommentTok{## [1] "Est -ce que les règles sont nécessaires"}
+\CommentTok{## }
+\CommentTok{## }
+\CommentTok{## $DEP_CLAUSES}
+\CommentTok{## $DEP_CLAUSES[[1]]}
+\CommentTok{## [1] "NA"}
+\end{Highlighting}
+\end{Shaded}
+
+Citations or reported speech enclosed with French guillmets («»), single
+or double quotation marks are also considered subordinate clauses.
+
+\begin{verbatim}
+[1] "Il est possible que la langue disparaisse après quelques générations, car, comme dit le professeur Roegiest, professeur des langues romanes et linguiste de l'espagnol à l'université de Gand, « Une langue qui a perdu son prestige est souvent condamnée à mort »."
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\KeywordTok{getUnits}\NormalTok{(test.sents[[}\StringTok{"b.274.1"}\NormalTok{]], }
+         \DataTypeTok{what =} \StringTok{"tokens"}\NormalTok{, }
+         \DataTypeTok{units =} \KeywordTok{c}\NormalTok{(}\StringTok{"DEP_CLAUSES"}\NormalTok{), }
+         \DataTypeTok{paste.tokens =} \OtherTok{TRUE}\NormalTok{)}
+\CommentTok{## $DEP_CLAUSES}
+\CommentTok{## $DEP_CLAUSES[[1]]}
+\CommentTok{## [1] "que la langue disparaisse après quelques générations"}
+\CommentTok{## }
+\CommentTok{## $DEP_CLAUSES[[2]]}
+\CommentTok{## [1] "comme dit le professeur Roegiest professeur des langues romanes et linguiste de l' espagnol à l' université de Gand Une langue qui a perdu son prestige"}
+\CommentTok{## }
+\CommentTok{## $DEP_CLAUSES[[3]]}
+\CommentTok{## [1] "Une langue qui a perdu son prestige est souvent condamnée à mort"}
+\CommentTok{## }
+\CommentTok{## $DEP_CLAUSES[[4]]}
+\CommentTok{## [1] "qui a perdu son prestige"}
+\end{Highlighting}
+\end{Shaded}
+
+\hypertarget{coordinated-clauses}{%
+\subsection{Coordinated clauses}\label{coordinated-clauses}}
+
+Coordinated clauses are clauses which are not semantically and/or
+structurally dependent on a super-ordinate syntactic structure but are
+conjoined to one or more clauses of syntactically equal status. They may
+be joined by a coordinating conjunction (e.g.~\emph{et}; `and'),
+punctuation (e.g.~semi-colon, colon, comma) or by juxtaposition and must
+contain both a subject and a finite verb. They are extracted from the
+root nodes of finite verbs which are not themselves dependent on
+subordinate conjunctions or pronouns (to exclude dependent clauses).
+
+\begin{verbatim}
+[1] "Dans la prison, il n'ont plus d'éducation, il ne voient que des criminels et ils doivent devenir des adultes en nulle temps."
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\KeywordTok{getUnits}\NormalTok{(test.sents[[}\StringTok{"a.90.1"}\NormalTok{]], }
+         \DataTypeTok{what =} \StringTok{"tokens"}\NormalTok{, }
+         \DataTypeTok{units =} \KeywordTok{c}\NormalTok{(}\StringTok{"CO_CLAUSES"}\NormalTok{), }
+         \DataTypeTok{paste.tokens =} \OtherTok{TRUE}\NormalTok{)}
+\CommentTok{## $CO_CLAUSES}
+\CommentTok{## $CO_CLAUSES[[1]]}
+\CommentTok{## [1] "Dans la prison il n' ont plus d' éducation"}
+\CommentTok{## }
+\CommentTok{## $CO_CLAUSES[[2]]}
+\CommentTok{## [1] "il ne voient que des criminels"}
+\CommentTok{## }
+\CommentTok{## $CO_CLAUSES[[3]]}
+\CommentTok{## [1] "et ils doivent devenir des adultes en nulle temps"}
+\end{Highlighting}
+\end{Shaded}
+
+\hypertarget{tunits}{%
+\subsection{T-units}\label{tunits}}
+
+We use Hunt's (1970: 199) definition of a t-unit as ``one main clause
+plus any subordinate clause or non-clausal structure that is attached to
+or embedded in it''. Identifying t-units therefore depends on the
+identification of coordinated clauses since a sentence can only contain
+multiple t-units if it contains multiple coordinated clauses. A sentence
+that does not contain any coordinated clauses simply has one t-unit,
+provided it has at least one finite verb. Consistent with Hunt (1965),
+we do not classify sentence fragments (clauses without a finite verb) as
+t-units. Therefore, if a sentence has no coordinated clauses (and one
+finite verb) it has one t-unit. All additional coordinated clauses
+within a sentence are separate t-units. The three coordinated clauses in
+the sentence above therefore account for three t-units.
+
+\begin{verbatim}
+[1] "Dans la prison, il n'ont plus d'éducation, il ne voient que des criminels et ils doivent devenir des adultes en nulle temps."
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\KeywordTok{getUnits}\NormalTok{(test.sents[[}\StringTok{"a.90.1"}\NormalTok{]], }
+         \DataTypeTok{what =} \StringTok{"number"}\NormalTok{, }
+         \DataTypeTok{units =} \KeywordTok{c}\NormalTok{(}\StringTok{"CO_CLAUSES"}\NormalTok{,}\StringTok{"T_UNITS"}\NormalTok{))}
+\CommentTok{## CO_CLAUSES    T_UNITS }
+\CommentTok{##          3          3}
+\end{Highlighting}
+\end{Shaded}
+
+\hypertarget{noun-phrases}{%
+\subsection{Noun phrases}\label{noun-phrases}}
+
+We use Lu's (2010) definition of a noun phrase as a \emph{complex
+nominal} (see Cooper, 1976) which includes: nouns plus adjective(s),
+possessive(s), prepositional phrase(s), relative clause(s),
+participle(s), or appositive(s), nominal clause(s). We also include
+words (nouns, adverbs and pronouns) that are have a determiner
+(e.g.~\emph{une maison} `a house'; \emph{cet autre} `this other') in our
+definition. Following Lu (2010) and Cooper (1976), we also include
+gerunds and infinitives in subject position. The root nodes of noun
+phrases therefore include (within each t-unit) common nouns and proper
+nouns as well as gerunds and non-finite verbs when they are dependent on
+a finite verb and have a subject dependency label.
+
+\begin{verbatim}
+[1] "La question sur une nouvelle réforme de l'État est un grand problème qui se pose aujourd'hui en Belgique."
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\KeywordTok{getUnits}\NormalTok{(test.sents[[}\StringTok{"b.46.1"}\NormalTok{]], }
+         \DataTypeTok{what =} \StringTok{"tokens"}\NormalTok{, }
+         \DataTypeTok{units =} \KeywordTok{c}\NormalTok{(}\StringTok{"NOUN_PHRASES"}\NormalTok{), }
+         \DataTypeTok{paste.tokens =} \OtherTok{TRUE}\NormalTok{)}
+\CommentTok{## $NOUN_PHRASES}
+\CommentTok{## $NOUN_PHRASES[[1]]}
+\CommentTok{## [1] "La question sur une nouvelle réforme de l' État"}
+\CommentTok{## }
+\CommentTok{## $NOUN_PHRASES[[2]]}
+\CommentTok{## [1] "une nouvelle réforme de l' État"}
+\CommentTok{## }
+\CommentTok{## $NOUN_PHRASES[[3]]}
+\CommentTok{## [1] "l' État"}
+\CommentTok{## }
+\CommentTok{## $NOUN_PHRASES[[4]]}
+\CommentTok{## [1] "un grand problème qui se pose aujourd' hui en Belgique"}
+\CommentTok{## }
+\CommentTok{## $NOUN_PHRASES[[5]]}
+\CommentTok{## [1] "La question"}
+\CommentTok{## }
+\CommentTok{## $NOUN_PHRASES[[6]]}
+\CommentTok{## [1] "une nouvelle réforme"}
+\CommentTok{## }
+\CommentTok{## $NOUN_PHRASES[[7]]}
+\CommentTok{## [1] "un grand problème"}
+\end{Highlighting}
+\end{Shaded}
+
+\hypertarget{verb-phrases}{%
+\subsection{Verb phrases}\label{verb-phrases}}
+
+As in Lu (2010) we count both finite and non-finite verb phrases. These
+are extracted by taking all words which are dependent on a verb within a
+t-unit. Auxiliary verbs do not constitute their own verb phrase but are
+considered part of the main verb they modify. However, verb phrases with
+modal verbs are considered separate verb phrases. After extracting the
+dependents of each verb node, the units are cleaned by removing subjects
+and pre-verbal modifiers. When two verbs are coordinated they are also
+considered a singular verb phrase (e.g.~\emph{ne sont pas d'accord et
+présentent de solutions différents}; `do not agree and present different
+solutions').
+
+\begin{verbatim}
+[1] "Dotée d'un éventail de mots et d'expressions, la parole constitue le moyen de communication par excellence."
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\KeywordTok{getUnits}\NormalTok{(test.sents[[}\StringTok{"b.124.1"}\NormalTok{]], }
+         \DataTypeTok{what =} \StringTok{"tokens"}\NormalTok{, }
+         \DataTypeTok{units =} \KeywordTok{c}\NormalTok{(}\StringTok{"VERB_PHRASES"}\NormalTok{), }
+         \DataTypeTok{paste.tokens =} \OtherTok{TRUE}\NormalTok{)}
+\CommentTok{## $VERB_PHRASES}
+\CommentTok{## $VERB_PHRASES[[1]]}
+\CommentTok{## [1] "Dotée d' un éventail de mots et d' expressions"}
+\CommentTok{## }
+\CommentTok{## $VERB_PHRASES[[2]]}
+\CommentTok{## [1] "constitue le moyen de communication par excellence"}
+\end{Highlighting}
+\end{Shaded}
+
+\hypertarget{calculating-mesures}{%
+\section{Calculating mesures}\label{calculating-mesures}}
+
+The function \texttt{getMeasures()} can be used to get several measures
+of syntactic complexity from a list of sentences. The example below
+calculates these measures for the sentences used above.
+
+\begin{verbatim}
+ [1] "C'est un point très important."                                                                                                                                                                                                                                      
+ [2] "Ils prétendent qu'il est impossible de rééduquer un tel jeune criminel."                                                                                                                                                                                             
+ [3] "Quand les lois sont contre le droit, il n'y a qu'une héroïque façon de protester contre elles : les violer (Hugo)."                                                                                                                                                  
+ [4] "Des procès qui durent des années, des déclarations d'impôts inhumainement longues et compliquées, un gouvernement qui n'arrive pas à prendre forme..."                                                                                                               
+ [5] "Il y a quelques siècles, les empereurs pourraient modifier les règles selon leur volonté."                                                                                                                                                                           
+ [6] "Ensuite, il y a des délits dus aux problèmes personnels survenus à la maison ou à l'école."                                                                                                                                                                          
+ [7] "Est-ce que les règles sont nécessaires?"                                                                                                                                                                                                                             
+ [8] "Il est possible que la langue disparaisse après quelques générations, car, comme dit le professeur Roegiest, professeur des langues romanes et linguiste de l'espagnol à l'université de Gand, « Une langue qui a perdu son prestige est souvent condamnée à mort »."
+ [9] "Dans la prison, il n'ont plus d'éducation, il ne voient que des criminels et ils doivent devenir des adultes en nulle temps."                                                                                                                                        
+[10] "La question sur une nouvelle réforme de l'État est un grand problème qui se pose aujourd'hui en Belgique."                                                                                                                                                           
+[11] "Dotée d'un éventail de mots et d'expressions, la parole constitue le moyen de communication par excellence."                                                                                                                                                         
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\KeywordTok{getMeasures}\NormalTok{(examples)}
+\CommentTok{## $MLS}
+\CommentTok{## [1] 18.73}
+\CommentTok{## }
+\CommentTok{## $DIVS}
+\CommentTok{## [1] 9.84}
+\CommentTok{## }
+\CommentTok{## $T_S}
+\CommentTok{## [1] 1.18}
+\CommentTok{## }
+\CommentTok{## $MLT}
+\CommentTok{## [1] 15.85}
+\CommentTok{## }
+\CommentTok{## $DIVT}
+\CommentTok{## [1] 9.93}
+\CommentTok{## }
+\CommentTok{## $C_T}
+\CommentTok{## [1] 1.77}
+\CommentTok{## }
+\CommentTok{## $MLC}
+\CommentTok{## [1] 12.87}
+\CommentTok{## }
+\CommentTok{## $DIVC}
+\CommentTok{## [1] 9.1}
+\CommentTok{## }
+\CommentTok{## $MLNP}
+\CommentTok{## [1] 4.23}
+\CommentTok{## }
+\CommentTok{## $DIVNP}
+\CommentTok{## [1] 4.01}
+\CommentTok{## }
+\CommentTok{## $NP_C}
+\CommentTok{## [1] 2.26}
+\end{Highlighting}
+\end{Shaded}
+
+\hypertarget{references}{%
+\section*{References}\label{references}}
+\addcontentsline{toc}{section}{References}
+
+\hypertarget{refs}{}
+\leavevmode\hypertarget{ref-Cooper1976}{}%
+Cooper, T. C. (1976). Measuring written syntactic patterns of second
+language learners of German. \emph{Journal of Educational Research},
+\emph{69}(5), 176--183.
+\url{https://doi.org/10.1080/00220671.1976.10884868}
+
+\leavevmode\hypertarget{ref-Csardi2006}{}%
+Csardi, G., \& Nepusz, T. (2006). The igraph software package for
+complex network research. \emph{InterJournal (Complex Systems)}.
+
+\leavevmode\hypertarget{ref-Denis2012}{}%
+Denis, P., \& Sagot, B. (2012). Coupling an annotated corpus and a
+lexicon for state-of-the-art POS tagging. \emph{Language Resources and
+Evaluation}, \emph{46}(4), 721--736.
+\url{https://doi.org/10.1007/s10579-012-9193-0}
+
+\leavevmode\hypertarget{ref-Green2011}{}%
+Green, N. (2011). Dependency Parsing. \emph{WDS'11 proceedings of
+contributed papers, part i}. Prague.
+
+\leavevmode\hypertarget{ref-Hunt1965}{}%
+Hunt, K. (1965). \emph{Grammatical structures written at three grade
+levels}. Champaign, IL: NCTE.
+
+\leavevmode\hypertarget{ref-Hunt1970}{}%
+Hunt, K. (1970). Do sentences in the second language grow like those in
+the first? \emph{TESOL Quarterly1}, \emph{4}(3), 195--202.
+
+\leavevmode\hypertarget{ref-Lu2010}{}%
+Lu, X. (2010). Automatic analysis of syntactic complexity in second
+language writing. \emph{International Journal of Corpus Linguistics},
+\emph{15}(4), 474--496. \url{https://doi.org/10.1075/ijcl.15.4.02lu}
+
+\leavevmode\hypertarget{ref-Nivre2006}{}%
+Nivre, J., Hall, J., \& Nilsson, J. (2006). MaltParser : A data-driven
+parser-generator for dependency parsing. \emph{LREC 2006}, 2216--2219.
+
+\leavevmode\hypertarget{ref-Vandeweerd2021b}{}%
+Vandeweerd, N., Housen, A., \& Paquot, M. (n.d.). Applying
+phraseological complexity measures to L2 French: A partial replication
+study. \emph{International Journal of Learner Corpus Research}.
+
+\end{document}
