@@ -13,7 +13,7 @@ vignette](https://github.com/nvandeweerd/fsca/blob/main/example-analysis.md).
 # Licence
 
 This package is distributed with an MIT license, which means that anyone
-is free to use or modify the contents. In such cases, please the
+is free to use or modify the contents. In such cases, please include the
 following citation:
 
 > Vandeweerd, N. (in press). *fsca: French syntactic complexity
@@ -33,11 +33,11 @@ library(fsca)
 
 The package contains three functions:
 
-  - `getParse()`: a function to prepare dependency parsed texts for
+-   `getParse()`: a function to prepare dependency parsed texts for
     analysis
-  - `getUnits()`: a function to extract syntactic units from dependency
+-   `getUnits()`: a function to extract syntactic units from dependency
     parsed texts
-  - `getMeasures()`: a function to calculate measures of syntactic
+-   `getMeasures()`: a function to calculate measures of syntactic
     complexity from dependency parsed texts
 
 To see the documentation for each function, call `help()`.
@@ -57,7 +57,7 @@ syntactic units from a corpus of L2 French texts in order to calculate
 measures of syntactic complexity (see Vandeweerd, Housen, & Paquot,
 n.d.). The texts were POS-tagged with MElt Tagger (Denis & Sagot, 2012)
 and dependency parsed with Malt Parser (Nivre, Hall, & Nilsson,
-2006).\[1\]
+2006).[1]
 
 An example of a sentence in CONLL format is provided below:
 
@@ -75,7 +75,7 @@ An example of a sentence in CONLL format is provided below:
 <br>
 
 In this case, the main verb of the sentence is *est* (‘is-3SG.PRES’) and
-is labeled as the ‘root’. As the top level node of a sentence, it is not
+is labeled as the ‘root.’ As the top level node of a sentence, it is not
 dependent on any other word, hence the value of 0 in the DEP\_ON column.
 Because *est* is the second word of the sentence, the position is 2
 (indicated in the POSITION column). All words which are directly
@@ -85,7 +85,7 @@ includes the subject *C’* (‘it’) as well as the subject attribute
 root. The words which are directly dependent on *point* include the
 determiner *un* (‘a’) and the adjective *important* (‘important’), which
 is itself modified by the adverb *très* (‘very’). In this way, every
-word in the sentence is dependent on one and only one word.\[2\]
+word in the sentence is dependent on one and only one word.[2]
 
 # Syntactic structures
 
@@ -103,7 +103,7 @@ been simplified for readability by pasting the tokens together.
 Following Lu (2010: 481) we defined a sentence as “a group of words
 delimited by one of the following punctuation marks that signal the end
 of a sentence: period, question mark, exclamation mark, quotation mark
-or ellipsis”. Because the CONLL input to the `getUnits()` function is
+or ellipsis.” Because the CONLL input to the `getUnits()` function is
 already segmented into sentences, no additional query is required.
 
 ## Clauses
@@ -286,7 +286,7 @@ getUnits(test.sents[["a.90.1"]],
 
 We use Hunt’s (1970: 199) definition of a t-unit as “one main clause
 plus any subordinate clause or non-clausal structure that is attached to
-or embedded in it”. Identifying t-units therefore depends on the
+or embedded in it.” Identifying t-units therefore depends on the
 identification of coordinated clauses since a sentence can only contain
 multiple t-units if it contains multiple coordinated clauses. A sentence
 that does not contain any coordinated clauses simply has one t-unit,
@@ -361,8 +361,8 @@ modal verbs are considered separate verb phrases. After extracting the
 dependents of each verb node, the units are cleaned by removing subjects
 and pre-verbal modifiers. When two verbs are coordinated they are also
 considered a singular verb phrase (e.g. *ne sont pas d’accord et
-présentent de solutions différents*; ‘do not agree and present
-different solutions’).
+présentent de solutions différents*; ‘do not agree and present different
+solutions’).
 
     [1] "Dotée d'un éventail de mots et d'expressions, la parole constitue le moyen de communication par excellence."
 
@@ -379,25 +379,23 @@ getUnits(test.sents[["b.124.1"]],
 ## [1] "constitue le moyen de communication par excellence"
 ```
 
-# Calculating mesures
+# Calculating measures
 
 The function `getMeasures()` can be used to get several measures of
 syntactic complexity from a list of sentences. The example below
 calculates these measures for the sentences used above.
 
-``` 
- [1] "C'est un point très important."                                                                                                                                                                                                                                      
- [2] "Ils prétendent qu'il est impossible de rééduquer un tel jeune criminel."                                                                                                                                                                                             
- [3] "Quand les lois sont contre le droit, il n'y a qu'une héroïque façon de protester contre elles : les violer (Hugo)."                                                                                                                                                  
- [4] "Des procès qui durent des années, des déclarations d'impôts inhumainement longues et compliquées, un gouvernement qui n'arrive pas à prendre forme..."                                                                                                               
- [5] "Il y a quelques siècles, les empereurs pourraient modifier les règles selon leur volonté."                                                                                                                                                                           
- [6] "Ensuite, il y a des délits dus aux problèmes personnels survenus à la maison ou à l'école."                                                                                                                                                                          
- [7] "Est-ce que les règles sont nécessaires?"                                                                                                                                                                                                                             
- [8] "Il est possible que la langue disparaisse après quelques générations, car, comme dit le professeur Roegiest, professeur des langues romanes et linguiste de l'espagnol à l'université de Gand, « Une langue qui a perdu son prestige est souvent condamnée à mort »."
- [9] "Dans la prison, il n'ont plus d'éducation, il ne voient que des criminels et ils doivent devenir des adultes en nulle temps."                                                                                                                                        
-[10] "La question sur une nouvelle réforme de l'État est un grand problème qui se pose aujourd'hui en Belgique."                                                                                                                                                           
-[11] "Dotée d'un éventail de mots et d'expressions, la parole constitue le moyen de communication par excellence."                                                                                                                                                         
-```
+     [1] "C'est un point très important."                                                                                                                                                                                                                                      
+     [2] "Ils prétendent qu'il est impossible de rééduquer un tel jeune criminel."                                                                                                                                                                                             
+     [3] "Quand les lois sont contre le droit, il n'y a qu'une héroïque façon de protester contre elles : les violer (Hugo)."                                                                                                                                                  
+     [4] "Des procès qui durent des années, des déclarations d'impôts inhumainement longues et compliquées, un gouvernement qui n'arrive pas à prendre forme..."                                                                                                               
+     [5] "Il y a quelques siècles, les empereurs pourraient modifier les règles selon leur volonté."                                                                                                                                                                           
+     [6] "Ensuite, il y a des délits dus aux problèmes personnels survenus à la maison ou à l'école."                                                                                                                                                                          
+     [7] "Est-ce que les règles sont nécessaires?"                                                                                                                                                                                                                             
+     [8] "Il est possible que la langue disparaisse après quelques générations, car, comme dit le professeur Roegiest, professeur des langues romanes et linguiste de l'espagnol à l'université de Gand, « Une langue qui a perdu son prestige est souvent condamnée à mort »."
+     [9] "Dans la prison, il n'ont plus d'éducation, il ne voient que des criminels et ils doivent devenir des adultes en nulle temps."                                                                                                                                        
+    [10] "La question sur une nouvelle réforme de l'État est un grand problème qui se pose aujourd'hui en Belgique."                                                                                                                                                           
+    [11] "Dotée d'un éventail de mots et d'expressions, la parole constitue le moyen de communication par excellence."                                                                                                                                                         
 
 ``` r
 getMeasures(examples)
@@ -437,84 +435,91 @@ getMeasures(examples)
 
 # References
 
-<div id="refs" class="references">
+<div id="refs" class="references csl-bib-body hanging-indent"
+line-spacing="2">
 
-<div id="ref-Cooper1976">
+<div id="ref-Cooper1976" class="csl-entry">
 
-Cooper, T. C. (1976). Measuring written syntactic patterns of second
-language learners of German. *Journal of Educational Research*, *69*(5),
-176–183. <https://doi.org/10.1080/00220671.1976.10884868>
-
-</div>
-
-<div id="ref-Csardi2006">
-
-Csardi, G., & Nepusz, T. (2006). The igraph software package for complex
-network research. *InterJournal (Complex Systems)*.
+Cooper, T. C. (1976). <span class="nocase">Measuring written syntactic
+patterns of second language learners of German</span>. *Journal of
+Educational Research*, *69*(5), 176–183.
+<https://doi.org/10.1080/00220671.1976.10884868>
 
 </div>
 
-<div id="ref-Denis2012">
+<div id="ref-Csardi2006" class="csl-entry">
 
-Denis, P., & Sagot, B. (2012). Coupling an annotated corpus and a
-lexicon for state-of-the-art POS tagging. *Language Resources and
-Evaluation*, *46*(4), 721–736.
+Csardi, G., & Nepusz, T. (2006). <span class="nocase">The igraph
+software package for complex network research</span>. *InterJournal
+(Complex Systems)*.
+
+</div>
+
+<div id="ref-Denis2012" class="csl-entry">
+
+Denis, P., & Sagot, B. (2012). <span class="nocase">Coupling an
+annotated corpus and a lexicon for state-of-the-art POS tagging</span>.
+*Language Resources and Evaluation*, *46*(4), 721–736.
 <https://doi.org/10.1007/s10579-012-9193-0>
 
 </div>
 
-<div id="ref-Green2011">
+<div id="ref-Green2011" class="csl-entry">
 
 Green, N. (2011). Dependency Parsing. *WDS’11 proceedings of contributed
 papers, part i*. Prague.
 
 </div>
 
-<div id="ref-Hunt1965">
+<div id="ref-Hunt1965" class="csl-entry">
 
-Hunt, K. (1965). *Grammatical structures written at three grade levels*.
-Champaign, IL: NCTE.
-
-</div>
-
-<div id="ref-Hunt1970">
-
-Hunt, K. (1970). Do sentences in the second language grow like those in
-the first? *TESOL Quarterly1*, *4*(3), 195–202.
+Hunt, K. (1965). *<span class="nocase">Grammatical structures written at
+three grade levels</span>*. Champaign, IL: NCTE.
 
 </div>
 
-<div id="ref-Lu2010">
+<div id="ref-Hunt1970" class="csl-entry">
 
-Lu, X. (2010). Automatic analysis of syntactic complexity in second
-language writing. *International Journal of Corpus Linguistics*,
-*15*(4), 474–496. <https://doi.org/10.1075/ijcl.15.4.02lu>
-
-</div>
-
-<div id="ref-Nivre2006">
-
-Nivre, J., Hall, J., & Nilsson, J. (2006). MaltParser : A data-driven
-parser-generator for dependency parsing. *LREC 2006*, 2216–2219.
+Hunt, K. (1970). <span class="nocase">Do sentences in the second
+language grow like those in the first?</span> *TESOL Quarterly1*,
+*4*(3), 195–202.
 
 </div>
 
-<div id="ref-Vandeweerd2021b">
+<div id="ref-Lu2010" class="csl-entry">
 
-Vandeweerd, N., Housen, A., & Paquot, M. (n.d.). Applying phraseological
-complexity measures to L2 French: A partial replication study.
-*International Journal of Learner Corpus Research*.
+Lu, X. (2010). <span class="nocase">Automatic analysis of syntactic
+complexity in second language writing</span>. *International Journal of
+Corpus Linguistics*, *15*(4), 474–496.
+<https://doi.org/10.1075/ijcl.15.4.02lu>
+
+</div>
+
+<div id="ref-Nivre2006" class="csl-entry">
+
+Nivre, J., Hall, J., & Nilsson, J. (2006). <span
+class="nocase">MaltParser : A data-driven parser-generator for
+dependency parsing</span>. *LREC 2006*, 2216–2219.
+
+</div>
+
+<div id="ref-Vandeweerd2021b" class="csl-entry">
+
+Vandeweerd, N., Housen, A., & Paquot, M. (n.d.). <span
+class="nocase">Applying phraseological complexity measures to L2 French:
+A partial replication study</span>. *International Journal of Learner
+Corpus Research*.
 
 </div>
 
 </div>
 
-1.  On the basis of the dependency tags generated by Malt Parser, five
-    new dependency labels were created for the purpose of calculating
-    phraseological complexity measures: dobj: objects of verbs with the
-    POS tag “NC”; amod : noun modifiers with the POS tag “ADJ”;
-    advmod\_ADJ: modifiers of adjectives with the POS tag “ADV”;
-    advmod\_ADV: modifiers of adverbs with the POS tag “ADV”;
-    advmod\_VER: modifiers of verbs with the POS tag “ADV”
+[1] On the basis of the dependency tags generated by Malt Parser, five
+new dependency labels were created for the purpose of calculating
+phraseological complexity measures: dobj: objects of verbs with the POS
+tag “NC”; amod : noun modifiers with the POS tag “ADJ”; advmod\_ADJ:
+modifiers of adjectives with the POS tag “ADV”; advmod\_ADV: modifiers
+of adverbs with the POS tag “ADV”; advmod\_VER: modifiers of verbs with
+the POS tag “ADV”
 
-2.  For an overview of dependency parsing see Green (2011).
+[2] For an overview of dependency parsing see Green (2011).
