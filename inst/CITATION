@@ -6,5 +6,4 @@ bibentry(bibtype = "Article",
          textVersion = "Vandeweerd N (in press). fsca: French syntactic complexity analyzer. International Journal of Learner Corpus Research.",
          journal = "International Journal of Learner Corpus Research",
          author = c(person("Nathan", "Vandeweerd")),
-         year = "in press",
-         url = "https://github.com/nvandeweerd/fsca")
+         year = "in press")

@@ -12,12 +12,25 @@ vignette](https://github.com/nvandeweerd/fsca/blob/main/example-analysis.md).
 
 # Licence
 
-This package is distributed with an MIT license, which means that anyone
-is free to use or modify the contents. In such cases, please include the
-following citation:
+Copyright (c) 2021 Centre for English Corpus Linguistics, Université
+catholique de Louvain  
+Author: Nathan Vandeweerd  
+Contact: <cecl@uclouvain.be>
 
-> Vandeweerd, N. (in press). *fsca: French syntactic complexity
-> analyzer.* International Journal of Learner Corpus Research.
+This package is free software: you can redistribute it and/or modify it
+under the terms of the GNU General Public License as published by the
+Free Software Foundation, either version 3 of the License, or any later
+version. This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU General
+Public License for more details. When using this package please include
+the following citation:
+
+> Vandeweerd N (in press). *fsca: French syntactic complexity analyzer.*
+> International Journal of Learner Corpus Research.
+
+You should have received a copy of the GNU General Public License along
+with this package. If not, see <http://www.gnu.org/licenses/>.
 
 # Installation
 
