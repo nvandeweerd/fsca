@@ -4,7 +4,8 @@
 \name{example}
 \alias{example}
 \title{Example sentence in CONLL format}
-\format{A data frame containing 13 rows and 9 columns. The columns are as follows:
+\format{
+A data frame containing 13 rows and 9 columns. The columns are as follows:
 \describe{
 \item{SENTID}{sentence id}
 \item{TOKEN}{token}
@@ -15,7 +16,8 @@
 \item{POSITION}{position in the sentence}
 \item{DEP_TYPE}{type of dependency relation}
 \item{DEP_ON}{head of dependency}
-}}
+}
+}
 \usage{
 data(example)
 }

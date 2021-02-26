@@ -1,4 +1,4 @@
 library(testthat)
-library(synt.units.fcn)
+library(fsca)
 
 test_check("fsca")

@@ -4,7 +4,8 @@
 \name{test.sents}
 \alias{test.sents}
 \title{Example sentences in CONLL format}
-\format{A list containing 11 data frames. Each data frame has the following columns:
+\format{
+A list containing 11 data frames. Each data frame has the following columns:
 \describe{
 \item{SENTID}{sentence id}
 \item{TOKEN}{token}
@@ -15,7 +16,8 @@
 \item{POSITION}{position in the sentence}
 \item{DEP_TYPE}{type of dependency relation}
 \item{DEP_ON}{head of dependency}
-}}
+}
+}
 \usage{
 data(test.sents)
 }
