@@ -8,7 +8,7 @@ complexity in learner language. For more details see Vandeweerd, Housen
 and Paquot (in press).
 
 Also see how to run a complete analysis in [this
-vignette](https://github.com/nvandeweerd/fsca/blob/main/example-analysis.md).
+vignette](https://github.com/nvandeweerd/fsca/blob/main/vignettes/example-analysis.md).
 
 # Licence
 
