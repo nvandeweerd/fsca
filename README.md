@@ -26,8 +26,8 @@ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU General
 Public License for more details. When using this package please include
 the following citation:
 
-> Vandeweerd N (in press). *fsca: French syntactic complexity analyzer.*
-> International Journal of Learner Corpus Research.
+>Vandeweerd, N. (2021). fsca: French syntactic complexity analyzer. *International Journal of Learner Corpus Research*, *7*(2), 259–274. https://doi.org/10.1075/ijlcr.20018.van
+
 
 You should have received a copy of the GNU General Public License along
 with this package. If not, see <http://www.gnu.org/licenses/>.
